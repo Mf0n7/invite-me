@@ -1,0 +1,10 @@
+# Dependências de desenvolvimento (testes, lint, debug).
+# Inclui as de runtime. Instalar:  pip install -r requirements-dev.txt
+
+-r requirements.txt
+
+ruff>=0.7
+pytest>=8.3
+pytest-django>=4.9
+model-bakery>=1.19
+django-debug-toolbar>=4.4

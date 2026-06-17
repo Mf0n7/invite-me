@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# Projeto Django (não é uma lib distribuível): instalamos só as dependências,
+# sem tentar descobrir/empacotar `apps` e `config`.
+py-modules = []
+
+[project]
+name = "o-penetra-backend"
+version = "0.1.0"
+description = "API do O Penetra — eventos, convites e RSVP"
+requires-python = ">=3.12"
+dependencies = [
+    "Django>=5.1,<5.2",
+    "djangorestframework>=3.15",
+    "djangorestframework-simplejwt>=5.3",
+    "django-allauth>=65.0",
+    "dj-rest-auth>=7.0",
+    "drf-spectacular>=0.27",
+    "django-cors-headers>=4.4",
+    "django-environ>=0.11",
+    "psycopg[binary]>=3.2",
+    "Pillow>=11.0",
+    "openpyxl>=3.1",
+    "celery>=5.4",
+    "redis>=5.1",
+    "stripe>=11.0",
+    "gunicorn>=23.0",
+    "whitenoise>=6.7",
+    "requests>=2.32",
+    "PyJWT>=2.9",
+    "cryptography>=43.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.7",
+    "pytest>=8.3",
+    "pytest-django>=4.9",
+    "model-bakery>=1.19",
+    "django-debug-toolbar>=4.4",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = ["migrations"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "DJ"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.dev"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]

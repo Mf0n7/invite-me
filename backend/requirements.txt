@@ -1,0 +1,23 @@
+# Dependências de runtime do backend (O Penetra).
+# Espelha [project].dependencies do pyproject.toml.
+# Instalar:  pip install -r requirements.txt
+
+Django>=5.1,<5.2
+djangorestframework>=3.15
+djangorestframework-simplejwt>=5.3
+django-allauth>=65.0
+dj-rest-auth>=7.0
+drf-spectacular>=0.27
+django-cors-headers>=4.4
+django-environ>=0.11
+psycopg[binary]>=3.2
+Pillow>=11.0
+openpyxl>=3.1
+celery>=5.4
+redis>=5.1
+stripe>=11.0
+gunicorn>=23.0
+whitenoise>=6.7
+requests>=2.32
+PyJWT>=2.9
+cryptography>=43.0

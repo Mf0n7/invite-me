@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  O Penetra — tema escuro, neutro e discreto.
+  Base: zinc bem escuro. Acento: champanhe/dourado suave (toque de festa sem enfeite).
+  Para trocar o acento, ajuste --primary / --ring.
+*/
+@layer base {
+  :root {
+    --background: 240 6% 8%;
+    --foreground: 40 12% 92%;
+
+    --card: 240 5% 11%;
+    --card-foreground: 40 12% 92%;
+
+    --popover: 240 6% 10%;
+    --popover-foreground: 40 12% 92%;
+
+    /* acento champanhe/dourado */
+    --primary: 38 52% 60%;
+    --primary-foreground: 240 10% 8%;
+
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 40 12% 92%;
+
+    --muted: 240 4% 15%;
+    --muted-foreground: 240 5% 64%;
+
+    --accent: 240 4% 18%;
+    --accent-foreground: 40 12% 95%;
+
+    --destructive: 0 62% 47%;
+    --destructive-foreground: 40 12% 96%;
+
+    --border: 240 4% 18%;
+    --input: 240 4% 20%;
+    --ring: 38 52% 60%;
+
+    --radius: 0.6rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  /* leve gradiente de "salão" no fundo, bem sutil */
+  body {
+    background-image:
+      radial-gradient(.5px .5px at center, hsl(var(--primary) / 0.04) 0, transparent 100%),
+      radial-gradient(1200px 600px at 50% -10%, hsl(var(--primary) / 0.06), transparent 70%);
+    background-attachment: fixed;
+  }
+}
