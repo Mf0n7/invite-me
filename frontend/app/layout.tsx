@@ -1,20 +1,25 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter } from "next/font/google";
 
 import { Providers } from "@/lib/providers";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
-const display = Playfair_Display({ subsets: ["latin"], variable: "--font-display" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "O Penetra",
-  description: "Crie eventos, gerencie convites e confirme presenças. Sem penetra não convidado.",
+  description:
+    "Crie eventos, gerencie convites e confirme presenças. Sem penetra não convidado.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="pt-BR" className={`${sans.variable} ${display.variable}`}>
+    <html lang="pt-BR" className={cn("font-sans", inter.variable)}>
       <body className="min-h-screen">
         <Providers>{children}</Providers>
       </body>
