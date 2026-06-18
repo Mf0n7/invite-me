@@ -4,8 +4,8 @@ import { Check, ExternalLink, Gift } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-import { BackButton } from "@/components/back-button";
-import { DashboardShell } from "@/components/dashboard/shell";
+import { BackButton } from "@/components/shared/back-button";
+import { DashboardShell } from "@/features/dashboard/components/shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiErrorMessage } from "@/lib/api";
@@ -25,7 +25,8 @@ export default function BillingPage() {
 
   useEffect(() => {
     const status = new URLSearchParams(window.location.search).get("checkout");
-    if (status === "success") toast.success("Assinatura ativada! Pode levar alguns segundos.");
+    if (status === "success")
+      toast.success("Assinatura ativada! Pode levar alguns segundos.");
     if (status === "cancel") toast.info("Checkout cancelado.");
   }, []);
 
@@ -33,7 +34,9 @@ export default function BillingPage() {
     try {
       await subscribe.mutateAsync(capacity);
     } catch (err) {
-      toast.error(apiErrorMessage(err, "Não foi possível iniciar a assinatura."));
+      toast.error(
+        apiErrorMessage(err, "Não foi possível iniciar a assinatura."),
+      );
     }
   };
 
@@ -48,9 +51,12 @@ export default function BillingPage() {
   return (
     <DashboardShell>
       <BackButton href="/dashboard" />
-      <h1 className="mb-1 font-display text-2xl font-semibold tracking-tight sm:text-3xl">Planos</h1>
+      <h1 className="mb-1 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+        Planos
+      </h1>
       <p className="mb-6 text-sm text-muted-foreground">
-        Até 20 confirmados é grátis. Acima disso, escolha a melhor forma de revelar os nomes.
+        Até 20 confirmados é grátis. Acima disso, escolha a melhor forma de
+        revelar os nomes.
       </p>
 
       {/* Assinatura atual */}
@@ -62,15 +68,24 @@ export default function BillingPage() {
           {sub && sub.is_active ? (
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm">
-                Ativa: <span className="font-semibold">até {sub.capacity} convidados/mês</span>
+                Ativa:{" "}
+                <span className="font-semibold">
+                  até {sub.capacity} convidados/mês
+                </span>
               </p>
-              <Button variant="outline" size="sm" onClick={onManage} disabled={portal.isPending}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onManage}
+                disabled={portal.isPending}
+              >
                 <ExternalLink /> Gerenciar
               </Button>
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">
-              Plano <span className="font-medium text-foreground">grátis</span> (até 20 por evento).
+              Plano <span className="font-medium text-foreground">grátis</span>{" "}
+              (até 20 por evento).
             </p>
           )}
         </CardContent>
@@ -82,7 +97,12 @@ export default function BillingPage() {
         subtitle="Libere os nomes de um único evento. Sem mensalidade."
       >
         {tiers?.tiers.map((t) => (
-          <PriceCell key={t.capacity} capacity={t.capacity} price={formatBRL(t.event_cents)} per="evento" />
+          <PriceCell
+            key={t.capacity}
+            capacity={t.capacity}
+            price={formatBRL(t.event_cents)}
+            per="evento"
+          />
         ))}
       </PlanRow>
 
@@ -99,7 +119,9 @@ export default function BillingPage() {
               disabled={current || subscribe.isPending}
               onClick={() => onSubscribe(t.capacity)}
               className={`rounded-xl border p-3 text-left transition-colors disabled:opacity-100 ${
-                current ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"
+                current
+                  ? "border-primary bg-primary/10"
+                  : "border-border hover:border-primary/50"
               }`}
             >
               <p className="text-sm font-medium">até {t.capacity}</p>
@@ -133,7 +155,9 @@ export default function BillingPage() {
               {tiers ? formatBRL(tiers.gift_addon_cents) : "—"}
               <span className="text-xs text-muted-foreground"> /evento</span>
             </p>
-            <p className="text-xs text-muted-foreground">Libere direto na página do evento.</p>
+            <p className="text-xs text-muted-foreground">
+              Libere direto na página do evento.
+            </p>
           </div>
         </div>
       </PlanRow>
@@ -154,12 +178,22 @@ function PlanRow({
     <section className="mb-8">
       <h2 className="font-display text-xl font-semibold">{title}</h2>
       <p className="mb-3 text-sm text-muted-foreground">{subtitle}</p>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">{children}</div>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+        {children}
+      </div>
     </section>
   );
 }
 
-function PriceCell({ capacity, price, per }: { capacity: number; price: string; per: string }) {
+function PriceCell({
+  capacity,
+  price,
+  per,
+}: {
+  capacity: number;
+  price: string;
+  per: string;
+}) {
   return (
     <div className="rounded-xl border border-border p-3">
       <p className="text-sm font-medium">até {capacity}</p>

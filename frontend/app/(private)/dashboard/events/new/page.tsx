@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { BackButton } from "@/components/back-button";
-import { DashboardShell } from "@/components/dashboard/shell";
-import { EventForm } from "@/components/events/event-form";
+import { BackButton } from "@/components/shared/back-button";
+import { DashboardShell } from "@/features/dashboard/components/shell";
+import { EventForm } from "@/features/events/components/event-form";
 import { apiErrorMessage } from "@/lib/api";
 import { useCreateEvent, type EventInput } from "@/lib/events";
 

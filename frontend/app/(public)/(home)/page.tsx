@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PartyPopper } from "lucide-react";
 
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -56,10 +56,12 @@ export default function Home() {
         <PartyPopper className="size-3.5" /> sua festa começa aqui
       </span>
 
-      <h1 className="font-display text-5xl font-semibold tracking-tight sm:text-6xl">Convida</h1>
+      <h1 className="font-display text-5xl font-semibold tracking-tight sm:text-6xl">
+        Convida
+      </h1>
       <p className="mt-4 max-w-md text-balance text-muted-foreground">
-        Crie eventos, envie convites nominais e acompanhe quem confirmou presença — com lista de
-        presentes e tudo. Simples, bonito e festivo.
+        Crie eventos, envie convites nominais e acompanhe quem confirmou
+        presença — com lista de presentes e tudo. Simples, bonito e festivo.
       </p>
 
       <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">

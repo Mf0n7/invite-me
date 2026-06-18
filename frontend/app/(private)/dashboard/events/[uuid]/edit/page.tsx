@@ -6,15 +6,20 @@ import { Gift, LinkIcon, Pencil, Trash2, Users } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-import { BackButton } from "@/components/back-button";
-import { DashboardShell } from "@/components/dashboard/shell";
-import { EventForm } from "@/components/events/event-form";
-import { GiftPanel } from "@/components/events/gift-panel";
-import { InvitePanel } from "@/components/events/invite-panel";
-import { NominalInvitesPanel } from "@/components/events/nominal-invites-panel";
+import { BackButton } from "@/components/shared/back-button";
+import { DashboardShell } from "@/features/dashboard/components/shell";
+import { EventForm } from "@/features/events/components/event-form";
+import { GiftPanel } from "@/features/events/components/gift-panel";
+import { InvitePanel } from "@/features/events/components/invite-panel";
+import { NominalInvitesPanel } from "@/features/events/components/nominal-invites-panel";
 import { Button } from "@/components/ui/button";
 import { apiErrorMessage } from "@/lib/api";
-import { useDeleteEvent, useEvent, useUpdateEvent, type EventInput } from "@/lib/events";
+import {
+  useDeleteEvent,
+  useEvent,
+  useUpdateEvent,
+  type EventInput,
+} from "@/lib/events";
 
 const SECTIONS = [
   { id: "convite", label: "Link", icon: LinkIcon },
@@ -54,7 +59,8 @@ export default function EditEventPage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm("Excluir este evento? Esta ação não pode ser desfeita.")) return;
+    if (!confirm("Excluir este evento? Esta ação não pode ser desfeita."))
+      return;
     try {
       await deleteEvent.mutateAsync(uuid);
       toast.success("Evento excluído.");
@@ -84,7 +90,8 @@ export default function EditEventPage() {
               onClick={handleDelete}
               className="shrink-0 text-destructive"
             >
-              <Trash2 className="size-4" /> <span className="hidden sm:inline">Excluir</span>
+              <Trash2 className="size-4" />{" "}
+              <span className="hidden sm:inline">Excluir</span>
             </Button>
           </div>
 
@@ -112,7 +119,11 @@ export default function EditEventPage() {
               <GiftPanel uuid={uuid} />
             </section>
             <section id="dados" className="scroll-mt-40">
-              <EventForm event={event} onSubmit={handleSubmit} submitLabel="Salvar alterações" />
+              <EventForm
+                event={event}
+                onSubmit={handleSubmit}
+                submitLabel="Salvar alterações"
+              />
             </section>
           </div>
         </>

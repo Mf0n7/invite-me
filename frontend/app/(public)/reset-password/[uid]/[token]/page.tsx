@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
 
-import { AuthShell, FieldError } from "@/components/auth/auth-shell";
+import { AuthShell, FieldError } from "@/features/auth/components/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,7 +17,9 @@ import { apiErrorMessage } from "@/lib/api";
 
 const schema = z
   .object({
-    new_password1: z.string().min(8, "A senha precisa de ao menos 8 caracteres"),
+    new_password1: z
+      .string()
+      .min(8, "A senha precisa de ao menos 8 caracteres"),
     new_password2: z.string(),
   })
   .refine((d) => d.new_password1 === d.new_password2, {
@@ -44,7 +46,9 @@ export default function ResetPasswordPage() {
       toast.success("Senha alterada! Faça login.");
       setTimeout(() => router.push("/login"), 1500);
     } catch (err) {
-      toast.error(apiErrorMessage(err, "Link inválido ou expirado. Solicite um novo."));
+      toast.error(
+        apiErrorMessage(err, "Link inválido ou expirado. Solicite um novo."),
+      );
     }
   };
 
@@ -59,7 +63,9 @@ export default function ResetPasswordPage() {
       }
     >
       {done ? (
-        <p className="text-sm text-muted-foreground">Senha alterada! Redirecionando para o login…</p>
+        <p className="text-sm text-muted-foreground">
+          Senha alterada! Redirecionando para o login…
+        </p>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-1.5">

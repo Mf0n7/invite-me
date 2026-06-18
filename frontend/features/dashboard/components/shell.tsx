@@ -4,15 +4,25 @@ import { CalendarHeart, CreditCard, LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import { RequireAuth } from "@/components/auth/require-auth";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { RequireAuth } from "@/features/auth/components/require-auth";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/dashboard", label: "Meus eventos", icon: CalendarHeart, exact: true },
-  { href: "/dashboard/billing", label: "Planos", icon: CreditCard, exact: false },
+  {
+    href: "/dashboard",
+    label: "Meus eventos",
+    icon: CalendarHeart,
+    exact: true,
+  },
+  {
+    href: "/dashboard/billing",
+    label: "Planos",
+    icon: CreditCard,
+    exact: false,
+  },
   { href: "/dashboard/profile", label: "Perfil", icon: User, exact: false },
 ];
 
