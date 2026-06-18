@@ -59,15 +59,20 @@ class Subscription(models.Model):
 
 
 class EventPurchase(models.Model):
-    """Compra avulsa de faixa para um evento específico."""
+    """Compra avulsa para um evento (faixa de capacidade ou addon de presentes)."""
 
     class Status(models.TextChoices):
         PENDING = "pending", _("Pendente")
         PAID = "paid", _("Pago")
         FAILED = "failed", _("Falhou")
 
+    class Kind(models.TextChoices):
+        CAPACITY = "capacity", _("Faixa de capacidade")
+        GIFT = "gift", _("Lista de presentes")
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="purchases")
-    capacity = models.PositiveIntegerField(_("capacidade"))
+    kind = models.CharField(max_length=10, choices=Kind.choices, default=Kind.CAPACITY)
+    capacity = models.PositiveIntegerField(_("capacidade"), default=0)
     amount_cents = models.PositiveIntegerField(_("valor (centavos)"))
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
     stripe_session_id = models.CharField(max_length=255, blank=True, db_index=True)

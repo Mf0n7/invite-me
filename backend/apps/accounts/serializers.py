@@ -1,7 +1,23 @@
+from allauth.account.utils import user_pk_to_url_str
 from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import PasswordResetSerializer
+from django.conf import settings
 from rest_framework import serializers
 
 from .models import User
+
+
+def frontend_reset_url(request, user, temp_key) -> str:
+    """Link de redefinição de senha apontando para a página do frontend."""
+    uid = user_pk_to_url_str(user)
+    return f"{settings.FRONTEND_URL}/reset-password/{uid}/{temp_key}"
+
+
+class CustomPasswordResetSerializer(PasswordResetSerializer):
+    """Gera o e-mail de redefinição com link para o frontend."""
+
+    def get_email_options(self):
+        return {"url_generator": frontend_reset_url}
 
 
 class CustomRegisterSerializer(RegisterSerializer):

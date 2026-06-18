@@ -5,7 +5,7 @@ from django.conf import settings
 
 
 class GoogleLogin(SocialLoginView):
-    """Troca o token/código do Google por um par de tokens JWT do O Penetra."""
+    """Troca o token/código do Google por um par de tokens JWT do Convida."""
 
     adapter_class = GoogleOAuth2Adapter
     client_class = OAuth2Client

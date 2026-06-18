@@ -1,5 +1,5 @@
 /**
- * Cliente HTTP da API do O Penetra.
+ * Cliente HTTP da API do Convida.
  * Anexa o access token (JWT) e tenta refresh transparente em 401.
  * Em Server Components, passe o token explicitamente via `opts.token`.
  */

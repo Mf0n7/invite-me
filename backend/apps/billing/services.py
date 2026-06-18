@@ -2,7 +2,7 @@
 import stripe
 from django.conf import settings
 
-from .constants import CURRENCY, price_cents, tier_label
+from .constants import CURRENCY, subscription_price_cents, tier_label
 
 
 def stripe_enabled() -> bool:
@@ -22,6 +22,10 @@ def create_event_checkout(purchase) -> str:
     """Cria uma Checkout Session avulsa (pagamento único) e retorna a URL."""
     client = _client()
     event = purchase.event
+    if purchase.kind == purchase.Kind.GIFT:
+        product_name = f"Lista de presentes · {event.title}"
+    else:
+        product_name = f"{tier_label(purchase.capacity)} · {event.title}"
     session = client.checkout.Session.create(
         mode="payment",
         payment_method_types=["card", "pix"],
@@ -31,7 +35,7 @@ def create_event_checkout(purchase) -> str:
                 "price_data": {
                     "currency": CURRENCY,
                     "unit_amount": purchase.amount_cents,
-                    "product_data": {"name": f"{tier_label(purchase.capacity)} · {event.title}"},
+                    "product_data": {"name": product_name},
                 },
             }
         ],
@@ -77,11 +81,11 @@ def create_billing_portal(customer_id: str) -> str:
 def ensure_subscription_price(plan):
     """Cria Product + Price recorrente no Stripe para uma faixa, se ainda não existir."""
     client = _client()
-    product = client.Product.create(name=f"O Penetra · Assinatura até {plan.capacity}")
+    product = client.Product.create(name=f"Convida · Assinatura até {plan.capacity}")
     price = client.Price.create(
         product=product.id,
         currency=CURRENCY,
-        unit_amount=price_cents(plan.capacity),
+        unit_amount=subscription_price_cents(plan.capacity),
         recurring={"interval": "month"},
     )
     plan.stripe_price_id = price.id

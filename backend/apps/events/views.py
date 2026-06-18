@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from apps.common.permissions import IsOwner
 
+from .emails import send_event_created_email
 from .models import Event
 from .serializers import EventLinkSerializer, EventSerializer
 
@@ -24,7 +25,8 @@ class EventViewSet(viewsets.ModelViewSet):
         return Event.objects.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        event = serializer.save(owner=self.request.user)
+        send_event_created_email(event)
 
 
 class EventLinkView(APIView):

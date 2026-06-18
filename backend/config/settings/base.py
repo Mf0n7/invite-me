@@ -1,4 +1,4 @@
-"""Configurações base do O Penetra. Compartilhadas por dev e prod."""
+"""Configurações base do Convida. Compartilhadas por dev e prod."""
 from datetime import timedelta
 from pathlib import Path
 
@@ -122,6 +122,7 @@ ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["profile", "email"],
@@ -160,11 +161,12 @@ REST_AUTH = {
     "SESSION_LOGIN": False,
     "USER_DETAILS_SERIALIZER": "apps.accounts.serializers.UserSerializer",
     "REGISTER_SERIALIZER": "apps.accounts.serializers.CustomRegisterSerializer",
+    "PASSWORD_RESET_SERIALIZER": "apps.accounts.serializers.CustomPasswordResetSerializer",
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "O Penetra API",
-    "DESCRIPTION": "API de eventos, convites e RSVP do O Penetra.",
+    "TITLE": "Convida API",
+    "DESCRIPTION": "API de eventos, convites e RSVP do Convida.",
     "VERSION": "0.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
@@ -194,7 +196,7 @@ EMAIL_PORT = env.int("EMAIL_PORT", default=587)
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="O Penetra <no-reply@openetra.app>")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Convida <no-reply@convida.app>")
 
 # ---------------------------------------------------------------- i18n
 LANGUAGE_CODE = "pt-br"

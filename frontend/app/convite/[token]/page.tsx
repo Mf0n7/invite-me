@@ -8,6 +8,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { FieldError } from "@/components/auth/auth-shell";
+import { GiftSection } from "@/components/public/gift-section";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -158,10 +159,12 @@ export default function NominalInvitePage() {
               </Button>
             </form>
           )}
+
+          <GiftSection token={token} />
         </CardContent>
       </Card>
       <p className="mt-6 text-xs text-muted-foreground/70">
-        Powered by <span className="font-display text-primary">O Penetra</span>
+        Powered by <span className="font-display text-primary">Convida</span>
       </p>
     </main>
   );

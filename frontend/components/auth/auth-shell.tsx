@@ -19,7 +19,7 @@ export function AuthShell({
         href="/"
         className="mb-8 font-display text-3xl font-semibold tracking-tight text-primary"
       >
-        O Penetra
+        Convida
       </Link>
       <Card className="w-full max-w-sm">
         <CardHeader>

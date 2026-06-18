@@ -6,15 +6,15 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: penetra
-      POSTGRES_PASSWORD: penetra
-      POSTGRES_DB: penetra
+      POSTGRES_USER: convida
+      POSTGRES_PASSWORD: convida
+      POSTGRES_DB: convida
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U penetra"]
+      test: ["CMD-SHELL", "pg_isready -U convida"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -30,7 +30,7 @@ services:
     environment:
       DJANGO_SETTINGS_MODULE: config.settings.dev
       DJANGO_DEBUG: "true"
-      DATABASE_URL: postgres://penetra:penetra@db:5432/penetra
+      DATABASE_URL: postgres://convida:convida@db:5432/convida
       REDIS_URL: redis://redis:6379/0
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
       CORS_ALLOWED_ORIGINS: http://localhost:3000
@@ -49,7 +49,7 @@ services:
     command: celery -A config worker -l info
     environment:
       DJANGO_SETTINGS_MODULE: config.settings.dev
-      DATABASE_URL: postgres://penetra:penetra@db:5432/penetra
+      DATABASE_URL: postgres://convida:convida@db:5432/convida
       REDIS_URL: redis://redis:6379/0
     volumes:
       - ./backend:/app

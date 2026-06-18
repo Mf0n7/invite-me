@@ -80,12 +80,38 @@ export type RsvpList = {
   is_limited: boolean;
 };
 
-export type Tier = { capacity: number; amount_cents: number };
+export type Tier = { capacity: number; event_cents: number; subscription_cents: number };
 
 export type TiersResponse = {
   free_capacity: number;
   currency: string;
   tiers: Tier[];
+  gift_addon_cents: number;
+};
+
+export type GiftItem = {
+  id: number;
+  title: string;
+  description: string;
+  url: string;
+  status: "available" | "reserved";
+  claimed_by_name: string;
+  claimed_at: string | null;
+  created_at: string;
+};
+
+export type GiftListResponse = {
+  entitled: boolean;
+  items: GiftItem[];
+};
+
+export type PublicGift = {
+  id: number;
+  title: string;
+  description: string;
+  url: string;
+  status: "available" | "reserved";
+  is_available: boolean;
 };
 
 export type SubscriptionInfo = {
