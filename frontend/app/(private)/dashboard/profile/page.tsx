@@ -4,10 +4,16 @@ import { KeyRound, LogOut, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { BackButton } from "@/components/back-button";
-import { DashboardShell } from "@/components/dashboard/shell";
+import { BackButton } from "@/components/shared/back-button";
+import { DashboardShell } from "@/features/dashboard/components/shell";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useRequestPasswordReset } from "@/lib/account";
 import { apiErrorMessage } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
@@ -30,7 +36,9 @@ export default function ProfilePage() {
   return (
     <DashboardShell>
       <BackButton href="/dashboard" />
-      <h1 className="mb-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">Perfil</h1>
+      <h1 className="mb-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+        Perfil
+      </h1>
 
       <div className="max-w-md space-y-6">
         <Card>
@@ -41,7 +49,9 @@ export default function ProfilePage() {
             <p className="flex items-center gap-2">
               <Mail className="size-4 text-primary" /> {user?.email}
             </p>
-            {user?.full_name && <p className="text-muted-foreground">{user.full_name}</p>}
+            {user?.full_name && (
+              <p className="text-muted-foreground">{user.full_name}</p>
+            )}
           </CardContent>
         </Card>
 
@@ -53,8 +63,13 @@ export default function ProfilePage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3 sm:flex-row">
-            <Button variant="outline" onClick={changePassword} disabled={requestReset.isPending}>
-              <KeyRound /> {requestReset.isPending ? "Enviando…" : "Alterar senha"}
+            <Button
+              variant="outline"
+              onClick={changePassword}
+              disabled={requestReset.isPending}
+            >
+              <KeyRound />{" "}
+              {requestReset.isPending ? "Enviando…" : "Alterar senha"}
             </Button>
             <Button
               variant="ghost"

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { CalendarDays, MapPin, Plus } from "lucide-react";
 
-import { DashboardShell } from "@/components/dashboard/shell";
+import { DashboardShell } from "@/features/dashboard/components/shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEvents } from "@/lib/events";
@@ -20,7 +20,9 @@ export default function DashboardPage() {
           <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
             Seus eventos
           </h1>
-          <p className="text-sm text-muted-foreground">Crie e gerencie suas comemorações.</p>
+          <p className="text-sm text-muted-foreground">
+            Crie e gerencie suas comemorações.
+          </p>
         </div>
         <Button asChild className="w-full sm:w-auto">
           <Link href="/dashboard/events/new">
