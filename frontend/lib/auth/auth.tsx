@@ -1,10 +1,17 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-import { apiFetch, tokenStore } from "./api";
-import type { AuthTokens, RegisterPayload, User } from "./types";
+import { apiFetch, tokenStore } from "@/lib/api/index";
+import type { AuthTokens, RegisterPayload, User } from "@/features/auth/types";
 
 type AuthContextValue = {
   user: User | null;
@@ -99,7 +106,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       loginWithGoogle,
       logout,
     }),
-    [ready, token, userQuery.data, userQuery.isLoading, login, register, loginWithGoogle, logout],
+    [
+      ready,
+      token,
+      userQuery.data,
+      userQuery.isLoading,
+      login,
+      register,
+      loginWithGoogle,
+      logout,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

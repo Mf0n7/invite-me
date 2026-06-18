@@ -7,7 +7,7 @@ import { DashboardShell } from "@/components/dashboard/shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEvents } from "@/lib/events";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateTime } from "@/lib/utils/index";
 
 export default function DashboardPage() {
   const { data, isLoading } = useEvents();
@@ -17,8 +17,12 @@ export default function DashboardPage() {
     <DashboardShell>
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="font-display text-3xl font-semibold tracking-tight">Seus eventos</h1>
-          <p className="text-sm text-muted-foreground">Crie e gerencie suas comemorações.</p>
+          <h1 className="font-display text-3xl font-semibold tracking-tight">
+            Seus eventos
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Crie e gerencie suas comemorações.
+          </p>
         </div>
         <Button asChild>
           <Link href="/dashboard/events/new">

@@ -5,7 +5,7 @@ import ThemeProvider from "@/components/theme/ThemeProvider";
 import { useState } from "react";
 import { Toaster } from "sonner";
 
-import { AuthProvider } from "./auth";
+import { AuthProvider } from "@/lib/auth/auth";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [client] = useState(
