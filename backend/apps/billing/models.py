@@ -22,7 +22,7 @@ class SubscriptionPlan(models.Model):
     def __str__(self):
         return f"Assinatura até {self.capacity}"
 
-
+#
 class Subscription(models.Model):
     """Assinatura ativa de um usuário — vale para todos os eventos dele."""
 
