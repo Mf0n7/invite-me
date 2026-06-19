@@ -28,7 +28,8 @@ def create_event_checkout(purchase) -> str:
         product_name = f"{tier_label(purchase.capacity)} · {event.title}"
     session = client.checkout.Session.create(
         mode="payment",
-        payment_method_types=["card", "pix"],
+        # Sem payment_method_types fixo: o Checkout usa os métodos habilitados
+        # no painel do Stripe (cartão por padrão; Pix se você ativar).
         line_items=[
             {
                 "quantity": 1,
