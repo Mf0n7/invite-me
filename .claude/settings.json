@@ -33,7 +33,8 @@
       "Bash(rm -f db.sqlite3 _t_lista.csv _t_lista.xlsx)",
       "Bash(.venv/Scripts/python.exe manage.py makemigrations billing)",
       "Bash(:)",
-      "Bash(rm -f \"c:/Users/Matheus Fontenele/.claude/projects/c--Users-Matheus-Fontenele-Documents-projetos-o-penetra/memory/decisoes-fase-5-gating.md\" && echo \"removido\")"
+      "Bash(rm -f \"c:/Users/Matheus Fontenele/.claude/projects/c--Users-Matheus-Fontenele-Documents-projetos-o-penetra/memory/decisoes-fase-5-gating.md\" && echo \"removido\")",
+      "Bash(.venv/Scripts/python.exe manage.py makemigrations billing gifts)"
     ],
     "additionalDirectories": [
       "c:\\Users\\Matheus Fontenele\\.claude\\projects\\c--Users-Matheus-Fontenele-Documents-projetos-o-penetra\\memory"

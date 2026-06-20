@@ -1,118 +1,79 @@
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /*
-  O Penetra — tema escuro, neutro e discreto.
-  Base: zinc bem escuro. Acento: champanhe/dourado suave (toque de festa sem enfeite).
-  Para trocar o acento, ajuste --primary / --ring.
+  Convida — paleta "Tropical Festa".
+  Principal: turquesa. Acento festivo: coral (--celebrate).
+  Modo claro e escuro (alternados via classe .dark do next-themes).
 */
 @layer base {
   :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
+    --background: 186 100% 99%;
+    --foreground: 195 45% 11%;
 
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
+    --card: 0 0% 100%;
+    --card-foreground: 195 45% 11%;
 
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
+    --popover: 0 0% 100%;
+    --popover-foreground: 195 45% 11%;
 
-    /* acento champanhe/dourado */
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
+    --primary: 188 94% 40%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
+    --secondary: 186 40% 93%;
+    --secondary-foreground: 195 45% 14%;
 
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
+    --muted: 186 30% 94%;
+    --muted-foreground: 195 12% 40%;
 
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    --accent: 186 45% 91%;
+    --accent-foreground: 195 45% 14%;
 
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: 40 12% 96%;
+    --celebrate: 351 90% 64%;
+    --celebrate-foreground: 0 0% 100%;
 
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --radius: 0.625rem;
+    --border: 195 25% 87%;
+    --input: 195 25% 84%;
+    --ring: 188 94% 40%;
 
-    --chart-1: oklch(0.87 0 0);
-
-    --chart-2: oklch(0.556 0 0);
-
-    --chart-3: oklch(0.439 0 0);
-
-    --chart-4: oklch(0.371 0 0);
-
-    --chart-5: oklch(0.269 0 0);
-
-    --sidebar: oklch(0.985 0 0);
-
-    --sidebar-foreground: oklch(0.145 0 0);
-
-    --sidebar-primary: oklch(0.205 0 0);
-
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-
-    --sidebar-accent: oklch(0.97 0 0);
-
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-
-    --sidebar-border: oklch(0.922 0 0);
-
-    --sidebar-ring: oklch(0.708 0 0);
+    --radius: 0.7rem;
   }
-  .theme {
-    --font-heading: var(--font-sans);
-    --font-sans: var(--font-sans);
-  }
+
   .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
-  }
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
+    --background: 192 33% 8%;
+    --foreground: 186 55% 95%;
+
+    --card: 192 28% 11%;
+    --card-foreground: 186 55% 95%;
+
+    --popover: 192 30% 10%;
+    --popover-foreground: 186 55% 95%;
+
+    --primary: 187 85% 52%;
+    --primary-foreground: 192 45% 7%;
+
+    --secondary: 192 20% 18%;
+    --secondary-foreground: 186 55% 95%;
+
+    --muted: 192 18% 16%;
+    --muted-foreground: 190 14% 62%;
+
+    --accent: 192 22% 20%;
+    --accent-foreground: 186 55% 96%;
+
+    --celebrate: 351 88% 68%;
+    --celebrate-foreground: 192 45% 7%;
+
+    --destructive: 0 62% 48%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 192 20% 20%;
+    --input: 192 20% 22%;
+    --ring: 187 85% 52%;
   }
 }
 
@@ -123,12 +84,10 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
-  }
-  /* leve gradiente de "salão" no fundo, bem sutil */
-  body {
+    /* brilho festivo bem discreto no topo: turquesa + coral */
     background-image:
-      radial-gradient(.5px .5px at center, hsl(var(--primary) / 0.04) 0, transparent 100%),
-      radial-gradient(1200px 600px at 50% -10%, hsl(var(--primary) / 0.06), transparent 70%);
+      radial-gradient(900px 500px at 15% -10%, hsl(var(--primary) / 0.10), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, hsl(var(--celebrate) / 0.08), transparent 55%);
     background-attachment: fixed;
   }
 }

@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
+import { BackButton } from "@/components/back-button";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { EventForm } from "@/components/events/event-form";
 import { apiErrorMessage } from "@/lib/api";
@@ -27,13 +26,10 @@ export default function NewEventPage() {
 
   return (
     <DashboardShell>
-      <Link
-        href="/dashboard"
-        className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" /> Voltar
-      </Link>
-      <h1 className="mb-6 font-display text-3xl font-semibold tracking-tight">Novo evento</h1>
+      <BackButton href="/dashboard" />
+      <h1 className="mb-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+        Novo evento
+      </h1>
       <div className="max-w-2xl">
         <EventForm onSubmit={handleSubmit} submitLabel="Criar evento" />
       </div>

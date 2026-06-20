@@ -8,7 +8,14 @@ from rest_framework.views import APIView
 
 from apps.events.models import Event
 
-from .constants import FREE_CAPACITY, PAID_TIERS, price_cents
+from .constants import (
+    FREE_CAPACITY,
+    GIFT_ADDON_PRICE_CENTS,
+    PAID_TIERS,
+    event_price_cents,
+    price_cents,
+    subscription_price_cents,
+)
 from .models import EventPurchase, Subscription, SubscriptionPlan
 from .serializers import SubscriptionSerializer
 from .services import (
@@ -26,8 +33,22 @@ class TiersView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        tiers = [{"capacity": c, "amount_cents": price_cents(c)} for c in PAID_TIERS]
-        return Response({"free_capacity": FREE_CAPACITY, "currency": "brl", "tiers": tiers})
+        tiers = [
+            {
+                "capacity": c,
+                "event_cents": event_price_cents(c),
+                "subscription_cents": subscription_price_cents(c),
+            }
+            for c in PAID_TIERS
+        ]
+        return Response(
+            {
+                "free_capacity": FREE_CAPACITY,
+                "currency": "brl",
+                "tiers": tiers,
+                "gift_addon_cents": GIFT_ADDON_PRICE_CENTS,
+            }
+        )
 
 
 def _require_stripe():
@@ -53,6 +74,28 @@ class EventCheckoutView(APIView):
         event = get_object_or_404(Event, uuid=uuid, owner=request.user)
         purchase = EventPurchase.objects.create(
             event=event, capacity=capacity, amount_cents=price_cents(capacity)
+        )
+        try:
+            url = create_event_checkout(purchase)
+        except stripe.error.StripeError as exc:
+            return Response({"detail": str(exc)}, status=502)
+        return Response({"checkout_url": url})
+
+
+class GiftCheckoutView(APIView):
+    """Checkout do addon de lista de presentes (avulso por evento)."""
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, uuid):
+        if (resp := _require_stripe()) is not None:
+            return resp
+        event = get_object_or_404(Event, uuid=uuid, owner=request.user)
+        purchase = EventPurchase.objects.create(
+            event=event,
+            kind=EventPurchase.Kind.GIFT,
+            capacity=0,
+            amount_cents=GIFT_ADDON_PRICE_CENTS,
         )
         try:
             url = create_event_checkout(purchase)

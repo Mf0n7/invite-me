@@ -8,9 +8,9 @@ build-backend = "setuptools.build_meta"
 py-modules = []
 
 [project]
-name = "o-penetra-backend"
+name = "convida-backend"
 version = "0.1.0"
-description = "API do O Penetra — eventos, convites e RSVP"
+description = "API do Convida — eventos, convites e RSVP"
 requires-python = ">=3.12"
 dependencies = [
     "Django>=5.1,<5.2",

@@ -78,6 +78,11 @@ function LoginForm() {
             {...register("password")}
           />
           <FieldError message={errors.password?.message} />
+          <div className="text-right">
+            <Link href="/forgot-password" className="text-xs text-muted-foreground hover:text-primary">
+              Esqueci minha senha
+            </Link>
+          </div>
         </div>
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Entrando…" : "Entrar"}

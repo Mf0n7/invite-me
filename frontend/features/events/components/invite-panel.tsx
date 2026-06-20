@@ -166,7 +166,7 @@ function LockedNotice({ uuid, hidden }: { uuid: string; hidden: number }) {
               disabled={checkout.isPending}
               onClick={() => buy(t.capacity)}
             >
-              até {t.capacity} · {formatBRL(t.amount_cents)}
+              até {t.capacity} · {formatBRL(t.event_cents)}
             </Button>
           ))}
         </div>

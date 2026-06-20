@@ -1,25 +1,26 @@
-# O Penetra 🎭
+# Convida 🎉
 
-Plataforma de criação de eventos e gestão de convites (RSVP) com convites nominais,
-lista de presentes e camadas de acesso pagas por capacidade de convidados.
+Plataforma de **convites online e confirmação de presença (RSVP)** para festas, aniversários,
+casamentos e eventos em geral. Convites genéricos e nominais, lista de presentes e camadas de
+acesso pagas por capacidade de convidados.
 
 ## Stack
 
-| Camada     | Tecnologia                                                                         |
-| ---------- | ---------------------------------------------------------------------------------- |
-| Backend    | Python 3.13 · Django 5 · Django REST Framework                                     |
-| Auth       | JWT (simplejwt) · Google SSO (allauth + dj-rest-auth)                              |
-| Docs API   | drf-spectacular (Swagger / Redoc)                                                  |
-| Pagamentos | Stripe (assinatura por faixa + compra avulsa por evento)                           |
-| Async      | Celery + Redis                                                                     |
-| Banco      | PostgreSQL                                                                         |
-| Frontend   | Next.js 15 (App Router) · TypeScript · Tailwind · shadcn/ui · zod · TanStack Query |
-| Infra      | Docker · Coolify (Hostinger VPS)                                                   |
+| Camada | Tecnologia |
+|---|---|
+| Backend | Python 3.13 · Django 5 · Django REST Framework |
+| Auth | JWT (simplejwt) · Google SSO (allauth + dj-rest-auth) · reset de senha por e-mail |
+| Docs API | drf-spectacular (Swagger / Redoc) |
+| Pagamentos | Stripe (assinatura por faixa + compra avulsa por evento + addon de presentes) |
+| Async | Celery + Redis |
+| Banco | PostgreSQL |
+| Frontend | Next.js 15 (App Router) · TypeScript · Tailwind · shadcn/ui · zod · TanStack Query · next-themes |
+| Infra | Docker · Coolify (Hostinger VPS) |
 
 ## Estrutura
 
 ```
-o_penetra/
+convida/
 ├── backend/      # API Django + DRF
 ├── frontend/     # App Next.js
 ├── docker-compose.yml          # ambiente de desenvolvimento
@@ -28,26 +29,19 @@ o_penetra/
 
 ## Modelo de negócio (resumo)
 
-Capacidade do evento = nº de confirmados (acompanhantes contam). Preço = **R$ 0,20 × capacidade**.
+Capacidade do evento = nº de confirmados (acompanhantes contam).
 
-| Capacidade | Avulso     | Assinatura/mês |
-| ---------- | ---------- | -------------- |
-| até 20     | Grátis     | —              |
-| até 50     | R$ 10      | R$ 10          |
-| até 100    | R$ 20      | R$ 20          |
-| até 150    | R$ 30      | R$ 30          |
-| até 200    | R$ 40      | R$ 40          |
-| 300, 400…  | R$ 60, 80… | idem           |
+| Capacidade | Evento (avulso) | Assinatura/mês (1,8×) |
+|---|---|---|
+| até 20 | Grátis | — |
+| 50 / 100 / 150 / 200 | R$ 10 / 20 / 25 / 28 | R$ 18 / 36 / 45 / 50 |
+| 250 / 300 / 350 | R$ 31 / 35 / 40 | R$ 56 / 63 / 72 |
+| 400 / 450 / 500 | R$ 46 / 53 / 61 | R$ 83 / 95 / 110 |
 
-- **Sempre grátis:** criar evento, **receber confirmações sem teto** e ver a _quantidade_ de confirmados.
-- **Pago (faixa):** ver os _nomes_ dos confirmados acima de 20 — até a capacidade da faixa
-  (ex.: faixa 100 revela até 100 nomes; o 101º em diante só com faixa maior). A contagem total
-  continua visível de graça.
-- **Addon separado:** lista de presentes.
-
-> Importante: confirmar presença **nunca** é bloqueado. A cobrança gera apenas a chave para
-> _revelar os nomes_ já confirmados. Ex.: evento com 120 confirmados no plano grátis mostra
-> "120 confirmados" + os 20 primeiros nomes; ao ativar a faixa 150, revela os 120 nomes.
+- **Sempre grátis:** criar evento, receber confirmações sem teto e ver a *quantidade* de confirmados.
+- **Pago (faixa):** ver os *nomes* dos confirmados acima de 20 — revela as primeiras N confirmações
+  até a capacidade da faixa (avulsa para 1 evento, ou assinatura para eventos ilimitados na faixa).
+- **Addon separado:** lista de presentes (R$ 5 por evento, ou incluída em assinaturas ativas).
 
 ## Desenvolvimento local
 
@@ -59,14 +53,13 @@ cp frontend/.env.example frontend/.env.local
 docker compose up --build
 ```
 
-- API: http://localhost:8000
-- Docs API: http://localhost:8000/api/docs/
-- Frontend: http://localhost:3000
+- API:        http://localhost:8000
+- Docs API:   http://localhost:8000/api/docs/
+- Frontend:   http://localhost:3000
 
 ### Sem Docker
 
 Backend:
-
 ```bash
 cd backend
 python -m venv .venv && source .venv/Scripts/activate   # Windows (Git Bash)
@@ -79,7 +72,6 @@ python manage.py runserver
 > são espelhos para quem prefere instalar com `pip install -r`.
 
 Frontend:
-
 ```bash
 cd frontend
 npm install
@@ -106,6 +98,12 @@ Para testar o fluxo real localmente:
 Sem as chaves, os endpoints de checkout respondem `503` e o gating de nomes continua
 funcionando normalmente (faixa grátis = 20). A faixa avulsa de um evento pode ser liberada
 manualmente pelo Django admin (`EventPurchase` com status `paid`) para testes sem Stripe.
+
+## SEO
+
+Metadados ricos (title/description/keywords/Open Graph), `sitemap.xml`, `robots.txt` e dados
+estruturados (JSON-LD) já configurados no frontend. Defina `NEXT_PUBLIC_SITE_URL` com o domínio
+de produção para canonical/sitemap corretos.
 
 ## Deploy (Coolify)
 

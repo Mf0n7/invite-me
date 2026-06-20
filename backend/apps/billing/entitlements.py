@@ -1,4 +1,4 @@
-"""Resolução de acesso (entitlements) do O Penetra.
+"""Resolução de acesso (entitlements) do Convida.
 
 A contagem de confirmados é sempre livre. Os NOMES são revelados até a
 capacidade liberada, que vem da maior fonte entre:
@@ -28,3 +28,16 @@ def name_capacity_for_event(event: Event) -> int:
         capacity = max(capacity, sub.capacity)
 
     return capacity
+
+
+def can_use_gift_list(event: Event) -> bool:
+    """Lista de presentes: addon avulso pago do evento OU assinatura ativa do dono."""
+    has_addon = EventPurchase.objects.filter(
+        event=event,
+        kind=EventPurchase.Kind.GIFT,
+        status=EventPurchase.Status.PAID,
+    ).exists()
+    if has_addon:
+        return True
+    sub = Subscription.objects.filter(user=event.owner).first()
+    return bool(sub and sub.is_active)
