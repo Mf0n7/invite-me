@@ -52,12 +52,22 @@ export default function RegisterPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="full_name">Nome (opcional)</Label>
-          <Input id="full_name" autoComplete="name" {...register("full_name")} />
+          <Input
+            id="full_name"
+            autoComplete="name"
+            autoFocus
+            {...register("full_name")}
+          />
           <FieldError message={errors.full_name?.message} />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="email">E-mail</Label>
-          <Input id="email" type="email" autoComplete="email" {...register("email")} />
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            {...register("email")}
+          />
           <FieldError message={errors.email?.message} />
         </div>
         <div className="space-y-1.5">

@@ -55,7 +55,13 @@ function LoginForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="email">E-mail</Label>
-          <Input id="email" type="email" autoComplete="email" {...register("email")} />
+          <Input
+            id="email"
+            type="email"
+            autoFocus
+            autoComplete="email"
+            {...register("email")}
+          />
           <FieldError message={errors.email?.message} />
         </div>
         <div className="space-y-1.5">
@@ -68,7 +74,10 @@ function LoginForm() {
           />
           <FieldError message={errors.password?.message} />
           <div className="text-right">
-            <Link href="/forgot-password" className="text-xs text-muted-foreground hover:text-primary">
+            <Link
+              href="/forgot-password"
+              className="text-xs text-muted-foreground hover:text-primary"
+            >
               Esqueci minha senha
             </Link>
           </div>
