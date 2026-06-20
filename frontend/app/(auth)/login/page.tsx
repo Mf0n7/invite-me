@@ -7,21 +7,15 @@ import { Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import {
-  AuthShell,
-  Divider,
-  FieldError,
-} from "@/features/auth/components/auth-shell";
-import { GoogleButton } from "@/features/auth/components/google-button";
+import { AuthShell, Divider } from "@/components/auth/auth-shell";
+import { GoogleButton } from "@/components/auth/google-button";
+import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiErrorMessage } from "@/lib/api";
-import { useAuth } from "@/lib/auth/auth";
-import {
-  loginSchema,
-  type LoginValues,
-} from "@/features/auth/schemas/auth.schema";
+import { useAuth } from "@/context/auth";
+import { loginSchema, type LoginValues } from "@/lib/schemas";
 
 function LoginForm() {
   const { login } = useAuth();

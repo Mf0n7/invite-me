@@ -2,14 +2,12 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { apiFetch } from "./api";
-import type { GiftItem, GiftListResponse, PublicGift } from "./types";
+import { apiFetch } from "@/lib/api";
+import type { GiftItem, GiftListResponse, PublicGift } from "@/lib/types";
 
 const key = (uuid: string) => ["events", uuid, "gifts"];
 
 export type GiftInput = { title: string; description?: string; url?: string };
-
-// ---- Dono ----
 
 export function useGifts(uuid: string) {
   return useQuery({
@@ -56,8 +54,6 @@ export function useGiftCheckout(uuid: string) {
     },
   });
 }
-
-// ---- Público ----
 
 export function usePublicGifts(token: string) {
   return useQuery({

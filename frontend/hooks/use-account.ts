@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 
-import { apiFetch } from "./api";
+import { apiFetch } from "@/lib/api";
 
 export function useRequestPasswordReset() {
   return useMutation({

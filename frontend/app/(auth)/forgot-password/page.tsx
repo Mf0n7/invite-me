@@ -6,11 +6,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { AuthShell, FieldError } from "@/components/auth/auth-shell";
+import { AuthShell } from "@/components/auth/auth-shell";
+import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRequestPasswordReset } from "@/lib/account";
+import { useRequestPasswordReset } from "@/hooks/use-account";
 
 const schema = z.object({ email: z.string().email("E-mail inválido") });
 type Values = z.infer<typeof schema>;
@@ -26,7 +27,7 @@ export default function ForgotPasswordPage() {
 
   const onSubmit = async (values: Values) => {
     await request.mutateAsync(values.email).catch(() => null);
-    setSent(true); // não revelamos se o e-mail existe
+    setSent(true);
   };
 
   return (

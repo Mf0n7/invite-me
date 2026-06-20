@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { apiErrorMessage } from "@/lib/api";
-import { useClaimGift, usePublicGifts } from "@/lib/gifts";
+import { useClaimGift, usePublicGifts } from "@/hooks/use-gifts";
 
 export function GiftSection({ token }: { token: string }) {
   const { data: gifts } = usePublicGifts(token);

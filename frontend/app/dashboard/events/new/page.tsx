@@ -3,11 +3,11 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { BackButton } from "@/components/back-button";
+import { BackButton } from "@/components/shared/back-button";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { EventForm } from "@/components/events/event-form";
 import { apiErrorMessage } from "@/lib/api";
-import { useCreateEvent, type EventInput } from "@/lib/events";
+import { useCreateEvent, type EventInput } from "@/hooks/use-events";
 
 export default function NewEventPage() {
   const router = useRouter();

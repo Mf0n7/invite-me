@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { apiErrorMessage } from "@/lib/api";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/context/auth";
 
 // Tipagem mínima do Google Identity Services (code client).
 declare global {

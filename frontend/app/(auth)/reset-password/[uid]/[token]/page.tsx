@@ -8,11 +8,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
 
-import { AuthShell, FieldError } from "@/components/auth/auth-shell";
+import { AuthShell } from "@/components/auth/auth-shell";
+import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useConfirmPasswordReset } from "@/lib/account";
+import { useConfirmPasswordReset } from "@/hooks/use-account";
 import { apiErrorMessage } from "@/lib/api";
 
 const schema = z

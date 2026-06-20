@@ -6,7 +6,7 @@ import { Gift, LinkIcon, Pencil, Trash2, Users } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-import { BackButton } from "@/components/back-button";
+import { BackButton } from "@/components/shared/back-button";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { EventForm } from "@/components/events/event-form";
 import { GiftPanel } from "@/components/events/gift-panel";
@@ -14,7 +14,7 @@ import { InvitePanel } from "@/components/events/invite-panel";
 import { NominalInvitesPanel } from "@/components/events/nominal-invites-panel";
 import { Button } from "@/components/ui/button";
 import { apiErrorMessage } from "@/lib/api";
-import { useDeleteEvent, useEvent, useUpdateEvent, type EventInput } from "@/lib/events";
+import { useDeleteEvent, useEvent, useUpdateEvent, type EventInput } from "@/hooks/use-events";
 
 const SECTIONS = [
   { id: "convite", label: "Link", icon: LinkIcon },

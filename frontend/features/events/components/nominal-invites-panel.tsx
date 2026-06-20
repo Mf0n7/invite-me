@@ -14,7 +14,7 @@ import {
   useImportInvitations,
   useInvitations,
   useUpdateInvitation,
-} from "@/lib/invitations";
+} from "@/hooks/use-invitations";
 import type { Invitation } from "@/lib/types";
 
 export function NominalInvitesPanel({ uuid }: { uuid: string }) {
