@@ -2,8 +2,8 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { apiFetch } from "./api";
-import type { Invitation, Paginated } from "./types";
+import { apiFetch } from "@/lib/api";
+import type { Invitation, Paginated } from "@/lib/types";
 
 const key = (uuid: string) => ["events", uuid, "invitations"];
 

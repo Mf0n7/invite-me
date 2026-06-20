@@ -21,7 +21,6 @@ export function ThemeToggle() {
       aria-label="Alternar modo claro/escuro"
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
-      {/* Evita mismatch de hidratação: só mostra o ícone após montar */}
       {mounted ? isDark ? <Sun /> : <Moon /> : <Sun className="opacity-0" />}
     </Button>
   );

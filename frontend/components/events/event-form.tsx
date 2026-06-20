@@ -4,13 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-import { FieldError } from "@/components/auth/auth-shell";
+import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { isoToLocalInput, localInputToIso, type EventInput } from "@/lib/events";
+import { type EventInput } from "@/hooks/use-events";
+import { isoToLocalInput, localInputToIso } from "@/lib/utils";
 import { eventSchema, type EventFormValues } from "@/lib/schemas";
 import type { EventItem } from "@/lib/types";
 

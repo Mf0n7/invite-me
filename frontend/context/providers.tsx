@@ -5,7 +5,7 @@ import { ThemeProvider, useTheme } from "next-themes";
 import { useState } from "react";
 import { Toaster } from "sonner";
 
-import { AuthProvider } from "./auth";
+import { AuthProvider } from "@/context/auth";
 
 function ThemedToaster() {
   const { resolvedTheme } = useTheme();

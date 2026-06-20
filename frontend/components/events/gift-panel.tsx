@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { apiErrorMessage } from "@/lib/api";
-import { formatBRL, useTiers } from "@/lib/billing";
-import { useCreateGift, useDeleteGift, useGiftCheckout, useGifts } from "@/lib/gifts";
+import { useTiers } from "@/hooks/use-billing";
+import { useCreateGift, useDeleteGift, useGiftCheckout, useGifts } from "@/hooks/use-gifts";
+import { formatBRL } from "@/lib/utils";
 
 export function GiftPanel({ uuid }: { uuid: string }) {
   const { data } = useGifts(uuid);

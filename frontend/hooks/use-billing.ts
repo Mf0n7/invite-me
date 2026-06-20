@@ -2,12 +2,8 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { apiFetch } from "./api";
-import type { SubscriptionInfo, TiersResponse } from "./types";
-
-export function formatBRL(cents: number): string {
-  return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
+import { apiFetch } from "@/lib/api";
+import type { SubscriptionInfo, TiersResponse } from "@/lib/types";
 
 export function useTiers() {
   return useQuery({
@@ -24,7 +20,6 @@ export function useSubscription() {
   });
 }
 
-/** Checkout avulso por evento — retorna e redireciona para a URL do Stripe. */
 export function useEventCheckout(uuid: string) {
   return useMutation({
     mutationFn: (capacity: number) =>

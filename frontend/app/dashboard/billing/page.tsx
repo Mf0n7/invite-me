@@ -4,18 +4,18 @@ import { Check, ExternalLink, Gift } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-import { BackButton } from "@/components/back-button";
+import { BackButton } from "@/components/shared/back-button";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiErrorMessage } from "@/lib/api";
+import { formatBRL } from "@/lib/utils";
 import {
-  formatBRL,
   usePortal,
   useSubscription,
   useSubscriptionCheckout,
   useTiers,
-} from "@/lib/billing";
+} from "@/hooks/use-billing";
 
 export default function BillingPage() {
   const { data: tiers } = useTiers();

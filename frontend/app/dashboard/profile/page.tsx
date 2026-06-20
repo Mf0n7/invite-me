@@ -4,13 +4,13 @@ import { KeyRound, LogOut, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { BackButton } from "@/components/back-button";
+import { BackButton } from "@/components/shared/back-button";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useRequestPasswordReset } from "@/lib/account";
+import { useRequestPasswordReset } from "@/hooks/use-account";
 import { apiErrorMessage } from "@/lib/api";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/context/auth";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();

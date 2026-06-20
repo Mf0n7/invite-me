@@ -6,7 +6,7 @@ import { CalendarDays, MapPin, Plus } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useEvents } from "@/lib/events";
+import { useEvents } from "@/hooks/use-events";
 import { formatDateTime } from "@/lib/utils";
 
 export default function DashboardPage() {

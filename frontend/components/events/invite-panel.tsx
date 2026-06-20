@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { apiErrorMessage } from "@/lib/api";
-import { formatBRL, useEventCheckout, useTiers } from "@/lib/billing";
-import { useEventLink, useEventRsvps, useRegenerateLink, useRsvpSummary } from "@/lib/events";
+import { useEventCheckout, useTiers } from "@/hooks/use-billing";
+import { useEventLink, useEventRsvps, useRegenerateLink, useRsvpSummary } from "@/hooks/use-events";
+import { formatBRL } from "@/lib/utils";
 import type { RsvpPerson } from "@/lib/types";
 
 type PersonGroup = { rsvpId: number; guest: string | null; companions: string[] };

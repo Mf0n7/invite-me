@@ -3,8 +3,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-import { apiFetch, tokenStore } from "./api";
-import type { AuthTokens, RegisterPayload, User } from "./types";
+import { apiFetch, tokenStore } from "@/lib/api";
+import type { AuthTokens, RegisterPayload, User } from "@/lib/types";
 
 type AuthContextValue = {
   user: User | null;
@@ -21,7 +21,6 @@ const USER_KEY = ["auth-user"] as const;
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const qc = useQueryClient();
-  // Lê o token só após montar para não divergir do SSR (hidratação).
   const [token, setToken] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
   useEffect(() => {

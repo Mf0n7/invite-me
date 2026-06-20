@@ -2,15 +2,15 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { apiFetch } from "./api";
-import type { EventItem, EventLink, Paginated, RsvpList, RsvpSummary } from "./types";
+import { apiFetch } from "@/lib/api";
+import type { EventItem, EventLink, Paginated, RsvpList, RsvpSummary } from "@/lib/types";
 
 export type EventInput = {
   title: string;
   description?: string;
   address: string;
   location_link?: string;
-  starts_at: string; // ISO
+  starts_at: string;
   note?: string;
   allow_companions: boolean;
   max_companions: number;
@@ -19,7 +19,6 @@ export type EventInput = {
 
 const KEY = "events";
 
-/** Monta JSON ou FormData (quando há foto a enviar). */
 function buildBody(input: EventInput): unknown {
   const { photo, ...rest } = input;
   if (photo instanceof File) {
@@ -75,8 +74,6 @@ export function useDeleteEvent() {
   });
 }
 
-// ---- Link público de convite + resumo de confirmações ----
-
 export function useEventLink(uuid: string) {
   return useQuery({
     queryKey: [KEY, uuid, "link"],
@@ -107,16 +104,4 @@ export function useEventRsvps(uuid: string) {
     queryFn: () => apiFetch<RsvpList>(`/events/${uuid}/rsvps/`),
     enabled: !!uuid,
   });
-}
-
-/** ISO (com tz) -> valor de <input type="datetime-local"> no fuso local. */
-export function isoToLocalInput(iso: string): string {
-  const d = new Date(iso);
-  const off = d.getTimezoneOffset() * 60000;
-  return new Date(d.getTime() - off).toISOString().slice(0, 16);
-}
-
-/** Valor de datetime-local (local) -> ISO com offset. */
-export function localInputToIso(value: string): string {
-  return new Date(value).toISOString();
 }

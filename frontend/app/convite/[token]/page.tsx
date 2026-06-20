@@ -7,14 +7,15 @@ import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { FieldError } from "@/components/auth/auth-shell";
-import { GiftSection } from "@/components/public/gift-section";
+import { GiftSection } from "@/components/invite/gift-section";
+import { Centered } from "@/components/shared/centered";
+import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiErrorMessage } from "@/lib/api";
-import { useConfirmNominal, usePublicNominal } from "@/lib/public";
+import { useConfirmNominal, usePublicNominal } from "@/hooks/use-public";
 import { formatDateTime } from "@/lib/utils";
 
 const schema = z.object({
@@ -166,14 +167,6 @@ export default function NominalInvitePage() {
       <p className="mt-6 text-xs text-muted-foreground/70">
         Powered by <span className="font-display text-primary">Convida</span>
       </p>
-    </main>
-  );
-}
-
-function Centered({ children }: { children: React.ReactNode }) {
-  return (
-    <main className="container flex min-h-screen flex-col items-center justify-center text-center">
-      {children}
     </main>
   );
 }

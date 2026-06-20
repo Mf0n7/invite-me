@@ -2,8 +2,8 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { apiFetch } from "./api";
-import type { PublicEvent } from "./types";
+import { apiFetch } from "@/lib/api";
+import type { PublicEvent } from "@/lib/types";
 
 export type PublicNominal = {
   guest_name: string;

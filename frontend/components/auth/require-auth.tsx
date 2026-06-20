@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/context/auth";
 
 /** Envolve páginas que exigem login. Redireciona para /login se não autenticado. */
 export function RequireAuth({ children }: { children: React.ReactNode }) {
