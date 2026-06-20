@@ -67,11 +67,18 @@ export function EventForm({
   return (
     <form onSubmit={submit} className="space-y-5">
       <Field label="Título" error={errors.title?.message} required>
-        <Input {...register("title")} placeholder="Ex.: Aniversário da Ana" />
+        <Input
+          {...register("title")}
+          autoFocus
+          placeholder="Ex.: Aniversário da Ana"
+        />
       </Field>
 
       <Field label="Descrição" error={errors.description?.message}>
-        <Textarea {...register("description")} placeholder="Conte do que se trata (opcional)" />
+        <Textarea
+          {...register("description")}
+          placeholder="Conte do que se trata (opcional)"
+        />
       </Field>
 
       <Field label="Foto" error={undefined}>
@@ -81,7 +88,9 @@ export function EventForm({
           onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
         />
         {event?.photo && !photo && (
-          <p className="text-xs text-muted-foreground">Já existe uma foto. Envie outra para trocar.</p>
+          <p className="text-xs text-muted-foreground">
+            Já existe uma foto. Envie outra para trocar.
+          </p>
         )}
       </Field>
 
@@ -89,17 +98,27 @@ export function EventForm({
         <Field label="Endereço" error={errors.address?.message} required>
           <Input {...register("address")} placeholder="Rua, número, bairro" />
         </Field>
-        <Field label="Data e horário" error={errors.starts_at?.message} required>
+        <Field
+          label="Data e horário"
+          error={errors.starts_at?.message}
+          required
+        >
           <Input type="datetime-local" {...register("starts_at")} />
         </Field>
       </div>
 
       <Field label="Link da localização" error={errors.location_link?.message}>
-        <Input {...register("location_link")} placeholder="https://maps.google.com/… (opcional)" />
+        <Input
+          {...register("location_link")}
+          placeholder="https://maps.google.com/… (opcional)"
+        />
       </Field>
 
       <Field label="Observação" error={errors.note?.message}>
-        <Textarea {...register("note")} placeholder="Traje, recados, estacionamento… (opcional)" />
+        <Textarea
+          {...register("note")}
+          placeholder="Traje, recados, estacionamento… (opcional)"
+        />
       </Field>
 
       <div className="rounded-lg border border-border p-4">
@@ -125,7 +144,9 @@ export function EventForm({
 
         {allowCompanions && (
           <div className="mt-4">
-            <Label htmlFor="max_companions">Máximo de acompanhantes por convidado</Label>
+            <Label htmlFor="max_companions">
+              Máximo de acompanhantes por convidado
+            </Label>
             <Input
               id="max_companions"
               type="number"
@@ -139,7 +160,11 @@ export function EventForm({
         )}
       </div>
 
-      <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full sm:w-auto"
+      >
         {isSubmitting ? "Salvando…" : submitLabel}
       </Button>
     </form>

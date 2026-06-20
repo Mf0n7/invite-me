@@ -7,15 +7,18 @@ import { Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { AuthShell, Divider } from "@/components/auth/auth-shell";
-import { GoogleButton } from "@/components/auth/google-button";
+import { AuthShell, Divider } from "@/features/auth/components/auth-shell";
+import { GoogleButton } from "@/features/auth/components/google-button";
 import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiErrorMessage } from "@/lib/api";
 import { useAuth } from "@/context/auth";
-import { loginSchema, type LoginValues } from "@/lib/schemas";
+import {
+  loginSchema,
+  type LoginValues,
+} from "@/features/auth/schemas/auth.schema";
 
 function LoginForm() {
   const { login } = useAuth();
@@ -58,6 +61,7 @@ function LoginForm() {
           <Input
             id="email"
             type="email"
+            autoFocus
             autoComplete="email"
             {...register("email")}
           />
@@ -73,7 +77,10 @@ function LoginForm() {
           />
           <FieldError message={errors.password?.message} />
           <div className="text-right">
-            <Link href="/forgot-password" className="text-xs text-muted-foreground hover:text-primary">
+            <Link
+              href="/forgot-password"
+              className="text-xs text-muted-foreground hover:text-primary"
+            >
               Esqueci minha senha
             </Link>
           </div>
