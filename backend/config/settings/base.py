@@ -170,6 +170,15 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "0.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
+    # Ordem e descrição dos grupos exibidos na doc (Swagger/Redoc).
+    "TAGS": [
+        {"name": "Conta & Autenticação", "description": "Cadastro, login (e-mail e Google) e tokens."},
+        {"name": "Eventos", "description": "CRUD de eventos e link público de convite."},
+        {"name": "Convites nominais", "description": "Convites individuais por pessoa e importação de listas."},
+        {"name": "Confirmações (RSVP)", "description": "Confirmação de presença e resumo para o dono."},
+        {"name": "Lista de presentes", "description": "Presentes do evento e reservas pelos convidados."},
+        {"name": "Pagamentos & Assinatura", "description": "Faixas, checkouts, assinatura e webhook do Stripe."},
+    ],
 }
 
 # ---------------------------------------------------------------- CORS / CSRF

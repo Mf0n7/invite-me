@@ -52,16 +52,6 @@ class ConfirmSerializer(serializers.ModelSerializer):
         return attrs
 
 
-class RsvpSerializer(serializers.ModelSerializer):
-    """Confirmação como o dono vê (nomes incluídos)."""
-
-    total_people = serializers.IntegerField(read_only=True)
-
-    class Meta:
-        model = Rsvp
-        fields = ["id", "name", "companion_names", "companions_count", "total_people", "created_at"]
-
-
 class RsvpSummarySerializer(serializers.Serializer):
     """Resumo de contagem — sempre gratuito, sem teto."""
 
