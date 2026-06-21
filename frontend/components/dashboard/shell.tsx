@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 import { RequireAuth } from "@/components/auth/require-auth";
+import { DashboardFooter } from "@/components/dashboard/footer";
 import { Logo } from "@/components/shared/logo";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   return (
     <RequireAuth>
-      <div className="min-h-screen">
+      <div className="flex min-h-screen flex-col">
         {/* Mobile sidebar */}
         <div
           className={cn(
@@ -164,7 +165,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </nav>
         </header>
 
-        <main className="container py-6 sm:py-8">{children}</main>
+        <main className="container flex-1 py-6 sm:py-8">{children}</main>
+        <DashboardFooter />
       </div>
     </RequireAuth>
   );
