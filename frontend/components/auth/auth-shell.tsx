@@ -1,6 +1,5 @@
-import Link from "next/link";
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Logo } from "@/components/shared/logo";
 
 export function AuthShell({
   title,
@@ -15,12 +14,7 @@ export function AuthShell({
 }) {
   return (
     <main className="container flex min-h-screen flex-col items-center justify-center py-12">
-      <Link
-        href="/"
-        className="mb-8 font-display text-3xl font-semibold tracking-tight text-primary"
-      >
-        Convida
-      </Link>
+      <Logo className="mb-8 text-3xl tracking-tight" />
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>{title}</CardTitle>

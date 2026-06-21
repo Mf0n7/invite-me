@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 import { RequireAuth } from "@/components/auth/require-auth";
+import { Logo } from "@/components/shared/logo";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth";
@@ -64,11 +65,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             )}
           >
             <div className="flex h-14 items-center justify-between border-b border-border px-4">
-              <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
-                <span className="font-display text-2xl font-semibold text-primary">
-                  Convida
-                </span>
-              </Link>
+              <Logo href="/dashboard" onClick={() => setMobileOpen(false)} />
               <Button
                 variant="ghost"
                 size="icon"
@@ -117,11 +114,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
         <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">
           <div className="container flex h-14 items-center justify-between gap-2">
-            <Link href="/dashboard">
-              <h1 className="font-display text-2xl font-semibold text-primary md:text-3xl">
-                Convida
-              </h1>
-            </Link>
+            <Logo href="/dashboard" className="md:text-3xl" />
             <div className="flex items-center gap-1">
               <span className="hidden md:inline-flex">
                 <ThemeToggle />
