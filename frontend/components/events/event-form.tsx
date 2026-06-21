@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
+import { Field } from "@/components/shared/field";
 import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -171,25 +172,3 @@ export function EventForm({
   );
 }
 
-function Field({
-  label,
-  error,
-  required,
-  children,
-}: {
-  label: string;
-  error?: string;
-  required?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <Label>
-        {label}
-        {required && <span className="ml-0.5 text-primary">*</span>}
-      </Label>
-      {children}
-      <FieldError message={error} />
-    </div>
-  );
-}

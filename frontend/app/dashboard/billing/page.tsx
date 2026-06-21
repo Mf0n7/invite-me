@@ -6,6 +6,8 @@ import { toast } from "sonner";
 
 import { BackButton } from "@/components/shared/back-button";
 import { DashboardShell } from "@/components/dashboard/shell";
+import { PlanRow } from "@/components/billing/plan-row";
+import { PriceCell } from "@/components/billing/price-cell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiErrorMessage } from "@/lib/api";
@@ -164,42 +166,3 @@ export default function BillingPage() {
   );
 }
 
-function PlanRow({
-  title,
-  subtitle,
-  children,
-}: {
-  title: string;
-  subtitle: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="mb-8">
-      <h2 className="font-display text-xl font-semibold">{title}</h2>
-      <p className="mb-3 text-sm text-muted-foreground">{subtitle}</p>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function PriceCell({
-  capacity,
-  price,
-  per,
-}: {
-  capacity: number;
-  price: string;
-  per: string;
-}) {
-  return (
-    <div className="rounded-xl border border-border p-3">
-      <p className="text-sm font-medium">até {capacity}</p>
-      <p className="font-display text-lg">
-        {price}
-        <span className="text-xs text-muted-foreground">/{per}</span>
-      </p>
-    </div>
-  );
-}

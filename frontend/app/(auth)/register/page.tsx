@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { AuthShell, Divider } from "@/components/auth/auth-shell";
+import { AuthShell } from "@/components/auth/auth-shell";
+import { Divider } from "@/components/shared/divider";
 import { GoogleButton } from "@/components/auth/google-button";
 import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
