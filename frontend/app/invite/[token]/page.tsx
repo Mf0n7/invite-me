@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 import { GiftSection } from "@/components/invite/gift-section";
+import { InvitePageSkeleton } from "@/features/invitations/components/invite-page-skeleton";
 import { Centered } from "@/components/shared/centered";
 import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,10 @@ export default function InvitePage() {
     defaultValues: { name: "", companions: [] },
   });
 
-  const { fields, append, remove } = useFieldArray({ control, name: "companions" });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "companions",
+  });
 
   const setCompanionCount = (n: number) => {
     const current = fields.length;
@@ -51,12 +55,14 @@ export default function InvitePage() {
       });
       setConfirmedName(res.name);
     } catch (err) {
-      setFormError(apiErrorMessage(err, "Não foi possível confirmar. Tente novamente."));
+      setFormError(
+        apiErrorMessage(err, "Não foi possível confirmar. Tente novamente."),
+      );
     }
   };
 
   if (isLoading) {
-    return <Centered>Carregando convite…</Centered>;
+    return <InvitePageSkeleton />;
   }
   if (isError || !event) {
     return (
@@ -74,7 +80,11 @@ export default function InvitePage() {
       <Card className="w-full max-w-lg overflow-hidden">
         {event.photo && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={event.photo} alt={event.title} className="h-48 w-full object-cover" />
+          <img
+            src={event.photo}
+            alt={event.title}
+            className="h-48 w-full object-cover"
+          />
         )}
         <CardHeader>
           <p className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
@@ -128,7 +138,11 @@ export default function InvitePage() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-1.5">
                 <Label htmlFor="name">Seu nome</Label>
-                <Input id="name" {...register("name")} placeholder="Como você se chama?" />
+                <Input
+                  id="name"
+                  {...register("name")}
+                  placeholder="Como você se chama?"
+                />
                 <FieldError message={errors.name?.message} />
               </div>
 
@@ -141,11 +155,16 @@ export default function InvitePage() {
                     onChange={(e) => setCompanionCount(Number(e.target.value))}
                     className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    {Array.from({ length: event.max_companions + 1 }, (_, i) => (
-                      <option key={i} value={i}>
-                        {i === 0 ? "Vou sozinho(a)" : `+${i} acompanhante${i > 1 ? "s" : ""}`}
-                      </option>
-                    ))}
+                    {Array.from(
+                      { length: event.max_companions + 1 },
+                      (_, i) => (
+                        <option key={i} value={i}>
+                          {i === 0
+                            ? "Vou sozinho(a)"
+                            : `+${i} acompanhante${i > 1 ? "s" : ""}`}
+                        </option>
+                      ),
+                    )}
                   </select>
 
                   {fields.map((field, i) => (
@@ -154,13 +173,17 @@ export default function InvitePage() {
                         placeholder={`Nome do acompanhante ${i + 1}`}
                         {...register(`companions.${i}.name` as const)}
                       />
-                      <FieldError message={errors.companions?.[i]?.name?.message} />
+                      <FieldError
+                        message={errors.companions?.[i]?.name?.message}
+                      />
                     </div>
                   ))}
                 </div>
               )}
 
-              {formError && <p className="text-sm text-destructive">{formError}</p>}
+              {formError && (
+                <p className="text-sm text-destructive">{formError}</p>
+              )}
 
               <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? "Confirmando…" : "Confirmar presença"}

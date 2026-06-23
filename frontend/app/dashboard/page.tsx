@@ -21,7 +21,9 @@ export default function DashboardPage() {
           <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
             Seus eventos
           </h1>
-          <p className="text-sm text-muted-foreground">Crie e gerencie suas comemorações.</p>
+          <p className="text-sm text-muted-foreground">
+            Crie e gerencie suas comemorações.
+          </p>
         </div>
         <Button asChild className="w-full sm:w-auto">
           <Link href="/dashboard/events/new">
@@ -60,4 +62,3 @@ export default function DashboardPage() {
     </DashboardShell>
   );
 }
-

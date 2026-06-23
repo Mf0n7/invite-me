@@ -19,7 +19,9 @@ import { useConfirmNominal, usePublicNominal } from "@/hooks/use-public";
 import { formatDateTime } from "@/lib/utils";
 
 const schema = z.object({
-  companions: z.array(z.object({ name: z.string().trim().min(1, "Informe o nome").max(120) })),
+  companions: z.array(
+    z.object({ name: z.string().trim().min(1, "Informe o nome").max(120) }),
+  ),
 });
 type Values = z.infer<typeof schema>;
 
@@ -34,7 +36,10 @@ export default function NominalInvitePage() {
     resolver: zodResolver(schema),
     defaultValues: { companions: [] },
   });
-  const { fields, append, remove } = useFieldArray({ control, name: "companions" });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "companions",
+  });
 
   const setCount = (n: number) => {
     const cur = fields.length;
@@ -56,7 +61,9 @@ export default function NominalInvitePage() {
     return (
       <Centered>
         <p className="font-display text-2xl">Convite não encontrado</p>
-        <p className="mt-2 text-sm text-muted-foreground">Verifique o link com quem te convidou.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Verifique o link com quem te convidou.
+        </p>
       </Centered>
     );
   }
@@ -69,7 +76,11 @@ export default function NominalInvitePage() {
       <Card className="w-full max-w-lg overflow-hidden">
         {event.photo && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={event.photo} alt={event.title} className="h-48 w-full object-cover" />
+          <img
+            src={event.photo}
+            alt={event.title}
+            className="h-48 w-full object-cover"
+          />
         )}
         <CardHeader>
           <p className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
@@ -116,14 +127,19 @@ export default function NominalInvitePage() {
                 {done ? "Presença confirmada!" : "Presença já confirmada"}
               </p>
               <p className="text-sm text-muted-foreground">
-                {done ? `Até lá, ${guest_name}! 🎉` : "Este convite já foi usado."}
+                {done
+                  ? `Até lá, ${guest_name}! 🎉`
+                  : "Este convite já foi usado."}
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Olá, <span className="font-medium text-foreground">{guest_name}</span>! Confirme sua
-                presença abaixo.
+                Olá,{" "}
+                <span className="font-medium text-foreground">
+                  {guest_name}
+                </span>
+                ! Confirme sua presença abaixo.
               </p>
 
               {event.allow_companions && event.max_companions > 0 && (
@@ -135,11 +151,16 @@ export default function NominalInvitePage() {
                     onChange={(e) => setCount(Number(e.target.value))}
                     className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    {Array.from({ length: event.max_companions + 1 }, (_, i) => (
-                      <option key={i} value={i}>
-                        {i === 0 ? "Vou sozinho(a)" : `+${i} acompanhante${i > 1 ? "s" : ""}`}
-                      </option>
-                    ))}
+                    {Array.from(
+                      { length: event.max_companions + 1 },
+                      (_, i) => (
+                        <option key={i} value={i}>
+                          {i === 0
+                            ? "Vou sozinho(a)"
+                            : `+${i} acompanhante${i > 1 ? "s" : ""}`}
+                        </option>
+                      ),
+                    )}
                   </select>
                   {fields.map((field, i) => (
                     <div key={field.id} className="space-y-1">
@@ -147,15 +168,25 @@ export default function NominalInvitePage() {
                         placeholder={`Nome do acompanhante ${i + 1}`}
                         {...register(`companions.${i}.name` as const)}
                       />
-                      <FieldError message={formState.errors.companions?.[i]?.name?.message} />
+                      <FieldError
+                        message={
+                          formState.errors.companions?.[i]?.name?.message
+                        }
+                      />
                     </div>
                   ))}
                 </div>
               )}
 
-              {formError && <p className="text-sm text-destructive">{formError}</p>}
+              {formError && (
+                <p className="text-sm text-destructive">{formError}</p>
+              )}
 
-              <Button type="submit" className="w-full" disabled={formState.isSubmitting}>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={formState.isSubmitting}
+              >
                 {formState.isSubmitting ? "Confirmando…" : "Confirmar presença"}
               </Button>
             </form>
