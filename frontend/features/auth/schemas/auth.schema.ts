@@ -18,3 +18,11 @@ export const registerSchema = z
     path: ["password2"],
   });
 export type RegisterValues = z.infer<typeof registerSchema>;
+
+export const profileSchema = z.object({
+  full_name: z.string().max(150).optional(),
+  display_name: z.string().max(150).optional(),
+  avatar_url: z.string().url("URL inválida").optional().or(z.literal("")),
+});
+
+export type ProfileValues = z.infer<typeof profileSchema>;

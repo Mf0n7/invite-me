@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 
 import { DashboardShell } from "@/components/dashboard/shell";
 import { FieldError } from "@/components/shared/field-error";
@@ -38,18 +37,10 @@ import {
   useUpdateProfile,
 } from "@/hooks/use-account";
 import { apiErrorMessage } from "@/lib/api";
-
-const profileSchema = z.object({
-  full_name: z.string().max(150).optional(),
-  display_name: z.string().max(150).optional(),
-  avatar_url: z
-    .string()
-    .url("URL inválida")
-    .optional()
-    .or(z.literal("")),
-});
-
-type ProfileValues = z.infer<typeof profileSchema>;
+import {
+  profileSchema,
+  type ProfileValues,
+} from "@/features/auth/schemas/auth.schema";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
@@ -145,7 +136,9 @@ export default function ProfilePage() {
               <div className="flex items-center gap-4">
                 <Avatar className="size-16">
                   <AvatarImage src={user?.avatar_url || undefined} />
-                  <AvatarFallback className="text-lg">{initials}</AvatarFallback>
+                  <AvatarFallback className="text-lg">
+                    {initials}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 space-y-1.5">
                   <Label htmlFor="avatar_url">URL do avatar</Label>
@@ -160,18 +153,30 @@ export default function ProfilePage() {
 
               <div className="space-y-1.5">
                 <Label>E-mail</Label>
-                <Input value={user?.email ?? ""} readOnly className="bg-muted text-muted-foreground" />
+                <Input
+                  value={user?.email ?? ""}
+                  readOnly
+                  className="bg-muted text-muted-foreground"
+                />
               </div>
 
               <div className="space-y-1.5">
                 <Label htmlFor="full_name">Nome completo</Label>
-                <Input id="full_name" placeholder="Seu nome" {...register("full_name")} />
+                <Input
+                  id="full_name"
+                  placeholder="Seu nome"
+                  {...register("full_name")}
+                />
                 <FieldError message={errors.full_name?.message} />
               </div>
 
               <div className="space-y-1.5">
                 <Label htmlFor="display_name">Nome de exibição</Label>
-                <Input id="display_name" placeholder="Como quer ser chamado" {...register("display_name")} />
+                <Input
+                  id="display_name"
+                  placeholder="Como quer ser chamado"
+                  {...register("display_name")}
+                />
                 <FieldError message={errors.display_name?.message} />
               </div>
 
@@ -203,7 +208,10 @@ export default function ProfilePage() {
               <Button
                 variant="ghost"
                 className="text-muted-foreground"
-                onClick={() => { logout(); router.push("/"); }}
+                onClick={() => {
+                  logout();
+                  router.push("/");
+                }}
               >
                 <LogOut /> Sair da conta
               </Button>
@@ -213,7 +221,8 @@ export default function ProfilePage() {
 
             <div>
               <p className="mb-3 text-sm text-muted-foreground">
-                Ao encerrar a conta, seus dados serão desativados permanentemente.
+                Ao encerrar a conta, seus dados serão desativados
+                permanentemente.
               </p>
               <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <DialogTrigger asChild>
@@ -225,11 +234,15 @@ export default function ProfilePage() {
                   <DialogHeader>
                     <DialogTitle>Encerrar conta</DialogTitle>
                     <DialogDescription>
-                      Esta ação não pode ser desfeita. Seus eventos e dados serão desativados.
+                      Esta ação não pode ser desfeita. Seus eventos e dados
+                      serão desativados.
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setDeleteOpen(false)}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setDeleteOpen(false)}
+                    >
                       Cancelar
                     </Button>
                     <Button
@@ -237,7 +250,9 @@ export default function ProfilePage() {
                       disabled={deleteAccount.isPending}
                       onClick={handleDelete}
                     >
-                      {deleteAccount.isPending ? "Encerrando…" : "Confirmar encerramento"}
+                      {deleteAccount.isPending
+                        ? "Encerrando…"
+                        : "Confirmar encerramento"}
                     </Button>
                   </DialogFooter>
                 </DialogContent>
