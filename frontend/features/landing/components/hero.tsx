@@ -5,13 +5,11 @@ import Link from "next/link";
 import { PartyPopper } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Header } from "./header";
 import { staggerContainer, staggerItem } from "@/lib/animations/variants";
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <Header />
+    <section className="flex min-h-[calc(100svh-3.5rem)] flex-col items-center justify-center px-6 text-center">
 
       <motion.div
         className="flex max-w-2xl flex-col items-center gap-6"
@@ -30,8 +28,7 @@ export function Hero() {
           variants={staggerItem}
           className="font-display text-5xl leading-tight font-semibold tracking-tight sm:text-6xl sm:leading-none lg:text-7xl"
         >
-          Faça sua <em className="not-italic text-celebrate">festa</em>{" "}
-          acontecer
+          Faça sua <em className="text-primary">festa</em> acontecer
         </motion.h1>
 
         <motion.p
@@ -50,7 +47,7 @@ export function Hero() {
             <Link href="/register">Criar minha conta</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link href="/login">Já tenho conta</Link>
+            <a href="#como-funciona">Como funciona</a>
           </Button>
         </motion.div>
       </motion.div>

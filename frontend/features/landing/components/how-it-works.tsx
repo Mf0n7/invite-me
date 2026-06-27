@@ -25,7 +25,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="py-24">
+    <section id="como-funciona" className="py-24">
       <div className="container max-w-4xl">
         <motion.div
           variants={fadeUp}

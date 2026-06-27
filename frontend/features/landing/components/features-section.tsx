@@ -32,7 +32,7 @@ const features: { icon: LucideIcon; title: string; description: string }[] = [
 
 export function FeaturesSection() {
   return (
-    <section className="py-24">
+    <section id="recursos" className="py-24">
       <div className="container max-w-4xl">
         <motion.div
           variants={fadeUp}
