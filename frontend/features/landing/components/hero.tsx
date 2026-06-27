@@ -1,0 +1,68 @@
+"use client";
+
+import { motion } from "motion/react";
+import Link from "next/link";
+import { PartyPopper } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { staggerContainer, staggerItem } from "@/lib/animations/variants";
+
+export function Hero() {
+  return (
+    <section className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center">
+      <div className="absolute right-4 top-4 flex items-center gap-3">
+        <Link
+          href="/login"
+          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+        >
+          Entrar
+        </Link>
+        <ThemeToggle />
+      </div>
+
+      <motion.div
+        className="flex max-w-2xl flex-col items-center gap-6"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.span
+          variants={staggerItem}
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-primary"
+        >
+          <PartyPopper className="size-3.5" /> grátis para começar
+        </motion.span>
+
+        <motion.h1
+          variants={staggerItem}
+          className="font-display text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl"
+        >
+          Faça sua{" "}
+          <em className="not-italic text-celebrate">festa</em>
+          {" "}acontecer
+        </motion.h1>
+
+        <motion.p
+          variants={staggerItem}
+          className="max-w-md text-balance text-lg text-muted-foreground"
+        >
+          Convites digitais, confirmação de presença em tempo real e lista de
+          presentes. Simples, bonito e festivo.
+        </motion.p>
+
+        <motion.div
+          variants={staggerItem}
+          className="flex w-full max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center"
+        >
+          <Button asChild size="lg">
+            <Link href="/register">Criar minha conta</Link>
+          </Button>
+          <Button asChild size="lg" variant="outline">
+            <Link href="/login">Já tenho conta</Link>
+          </Button>
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}

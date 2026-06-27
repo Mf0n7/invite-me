@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { PartyPopper } from "lucide-react";
 
-import { ThemeToggle } from "@/components/shared/theme-toggle";
-import { Button } from "@/components/ui/button";
+import { CtaSection } from "@/features/landing/components/cta-section";
+import { FeaturesSection } from "@/features/landing/components/features-section";
+import { Hero } from "@/features/landing/components/hero";
+import { HowItWorks } from "@/features/landing/components/how-it-works";
 
 export const metadata: Metadata = {
   title: "Convida — Convites online grátis e confirmação de presença (RSVP)",
@@ -43,33 +43,15 @@ const jsonLd = {
 
 export default function Home() {
   return (
-    <main className="container flex min-h-screen flex-col items-center justify-center px-6 text-center">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="absolute right-4 top-4">
-        <ThemeToggle />
-      </div>
-
-      <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1 text-xs uppercase tracking-[0.2em] text-primary animate-pulse">
-        <PartyPopper className="size-3.5" /> sua festa começa aqui
-      </span>
-
-      <h1 className="font-display text-5xl font-semibold tracking-tight sm:text-6xl">Convida</h1>
-      <p className="mt-4 max-w-md text-balance text-muted-foreground">
-        Crie eventos, envie convites nominais e acompanhe quem confirmou presença — com lista de
-        presentes e tudo. Simples, bonito e festivo.
-      </p>
-
-      <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">
-        <Button asChild size="lg">
-          <Link href="/register">Criar minha conta</Link>
-        </Button>
-        <Button asChild size="lg" variant="outline">
-          <Link href="/login">Entrar</Link>
-        </Button>
-      </div>
-    </main>
+      <Hero />
+      <HowItWorks />
+      <FeaturesSection />
+      <CtaSection />
+    </>
   );
 }
