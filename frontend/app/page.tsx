@@ -52,7 +52,7 @@ export default function Home() {
         <ThemeToggle />
       </div>
 
-      <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1 text-xs uppercase tracking-[0.2em] text-primary">
+      <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1 text-xs uppercase tracking-[0.2em] text-primary animate-pulse">
         <PartyPopper className="size-3.5" /> sua festa começa aqui
       </span>
 

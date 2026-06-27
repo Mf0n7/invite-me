@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: "Convida — Convites online e confirmação de presença (RSVP) para festas",
-    template: "%s · Convida",
+    template: "Convida | %s",
   },
   description,
   keywords,
