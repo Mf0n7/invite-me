@@ -5,21 +5,13 @@ import Link from "next/link";
 import { PartyPopper } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { Header } from "./header";
 import { staggerContainer, staggerItem } from "@/lib/animations/variants";
 
 export function Hero() {
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <div className="absolute right-4 top-4 flex items-center gap-3">
-        <Link
-          href="/login"
-          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          Entrar
-        </Link>
-        <ThemeToggle />
-      </div>
+      <Header />
 
       <motion.div
         className="flex max-w-2xl flex-col items-center gap-6"
@@ -29,18 +21,17 @@ export function Hero() {
       >
         <motion.span
           variants={staggerItem}
-          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-primary"
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-primary animate-pulse"
         >
           <PartyPopper className="size-3.5" /> grátis para começar
         </motion.span>
 
         <motion.h1
           variants={staggerItem}
-          className="font-display text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl"
+          className="font-display text-5xl leading-tight font-semibold tracking-tight sm:text-6xl sm:leading-none lg:text-7xl"
         >
-          Faça sua{" "}
-          <em className="not-italic text-celebrate">festa</em>
-          {" "}acontecer
+          Faça sua <em className="not-italic text-celebrate">festa</em>{" "}
+          acontecer
         </motion.h1>
 
         <motion.p
