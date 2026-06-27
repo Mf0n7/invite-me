@@ -30,10 +30,10 @@ export function SubscriptionTierButton({
     <button
       disabled={isCurrent || isPending}
       onClick={() => onSubscribe(tier.capacity)}
-      className={`rounded-xl border p-3 text-left transition-colors disabled:opacity-100 ${
+      className={`rounded-xl border p-4 text-left transition-colors disabled:opacity-100 ${
         isCurrent
           ? "border-primary bg-primary/10"
-          : "border-border hover:border-primary/50"
+          : "border-border hover:border-primary/50 hover:bg-primary/5"
       }`}
     >
       <p className="text-sm font-medium">até {tier.capacity}</p>

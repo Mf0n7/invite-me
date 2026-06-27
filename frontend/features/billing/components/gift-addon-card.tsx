@@ -7,7 +7,7 @@ interface GiftAddonCardProps {
 
 export function GiftAddonCard({ priceCents }: GiftAddonCardProps) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-border p-4">
+    <div className="flex items-center gap-3 rounded-xl border border-border p-4 transition-colors hover:border-primary/50 hover:bg-primary/5">
       <Gift className="size-6 text-primary" />
       <div>
         <p className="font-display text-lg">
