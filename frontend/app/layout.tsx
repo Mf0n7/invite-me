@@ -72,6 +72,18 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
   formatDetection: { telephone: false },
+  icons: {
+    icon: [
+      { url: "/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: { url: "/favicons/apple-touch-icon.png" },
+    other: [
+      { rel: "android-chrome-192x192", url: "/favicons/android-chrome-192x192.png" },
+      { rel: "android-chrome-512x512", url: "/favicons/android-chrome-512x512.png" },
+    ],
+  },
+  manifest: "/favicons/site.webmanifest",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
