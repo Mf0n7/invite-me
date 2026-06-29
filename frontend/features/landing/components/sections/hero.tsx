@@ -6,8 +6,11 @@ import { PartyPopper } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { staggerContainer, staggerItem } from "@/lib/animations/variants";
+import { useLenis } from "@/context/lenis";
 
 export function Hero() {
+  const lenis = useLenis();
+
   return (
     <section className="flex min-h-[calc(100svh-3.5rem)] flex-col items-center justify-center px-6 text-center">
       <motion.div
@@ -45,8 +48,12 @@ export function Hero() {
           <Button asChild size="lg">
             <Link href="/register">Criar minha conta</Link>
           </Button>
-          <Button asChild size="lg" variant="outline">
-            <a href="#como-funciona">Como funciona</a>
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => lenis?.scrollTo("#como-funciona", { offset: -56 })}
+          >
+            Como funciona
           </Button>
         </motion.div>
       </motion.div>

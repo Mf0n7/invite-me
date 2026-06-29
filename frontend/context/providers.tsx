@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Toaster } from "sonner";
 
 import { AuthProvider } from "@/context/auth";
+import { LenisProvider } from "@/context/lenis";
 
 function ThemedToaster() {
   const { resolvedTheme } = useTheme();
@@ -35,7 +36,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
     >
       <QueryClientProvider client={client}>
-        <AuthProvider>{children}</AuthProvider>
+        <LenisProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </LenisProvider>
         <ThemedToaster />
       </QueryClientProvider>
     </ThemeProvider>
