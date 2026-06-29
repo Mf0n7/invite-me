@@ -10,7 +10,6 @@ import { staggerContainer, staggerItem } from "@/lib/animations/variants";
 export function Hero() {
   return (
     <section className="flex min-h-[calc(100svh-3.5rem)] flex-col items-center justify-center px-6 text-center">
-
       <motion.div
         className="flex max-w-2xl flex-col items-center gap-6"
         variants={staggerContainer}

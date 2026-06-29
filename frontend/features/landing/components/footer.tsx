@@ -70,8 +70,8 @@ export function Footer() {
 
       <Separator className="border-border" />
 
-      <div className="flex flex-col items-center justify-between py-6 gap-3 text-xs text-muted-foreground md:flex-row">
-        <p>
+      <div className="py-6">
+        <p className="text-xs text-muted-foreground text-center">
           © {new Date().getFullYear()} Convida. Todos os direitos reservados.
         </p>
       </div>
