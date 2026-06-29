@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { CtaSection } from "@/features/landing/components/cta-section";
 import { FeaturesSection } from "@/features/landing/components/features-section";
 import { Footer } from "@/features/landing/components/footer";
-import { Header } from "@/features/landing/components/header";
+import { Header } from "@/features/landing/components/header/header";
 import { Hero } from "@/features/landing/components/hero";
 import { HowItWorks } from "@/features/landing/components/how-it-works";
 
