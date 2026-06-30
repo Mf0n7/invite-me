@@ -13,6 +13,7 @@ import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { apiErrorMessage } from "@/lib/api";
 import { useAuth } from "@/context/auth";
 import { registerSchema, type RegisterValues } from "@/lib/schemas";
@@ -73,9 +74,8 @@ export default function RegisterPage() {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="password1">Senha</Label>
-          <Input
+          <PasswordInput
             id="password1"
-            type="password"
             autoComplete="new-password"
             {...register("password1")}
           />
@@ -83,9 +83,8 @@ export default function RegisterPage() {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="password2">Confirmar senha</Label>
-          <Input
+          <PasswordInput
             id="password2"
-            type="password"
             autoComplete="new-password"
             {...register("password2")}
           />

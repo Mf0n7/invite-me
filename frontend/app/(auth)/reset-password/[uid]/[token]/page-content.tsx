@@ -11,8 +11,8 @@ import { toast } from "sonner";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { useConfirmPasswordReset } from "@/hooks/use-account";
 import { apiErrorMessage } from "@/lib/api";
 
@@ -65,9 +65,8 @@ export default function ResetPasswordPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="new_password1">Nova senha</Label>
-            <Input
+            <PasswordInput
               id="new_password1"
-              type="password"
               autoComplete="new-password"
               {...register("new_password1")}
             />
@@ -75,9 +74,8 @@ export default function ResetPasswordPage() {
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="new_password2">Confirmar nova senha</Label>
-            <Input
+            <PasswordInput
               id="new_password2"
-              type="password"
               autoComplete="new-password"
               {...register("new_password2")}
             />

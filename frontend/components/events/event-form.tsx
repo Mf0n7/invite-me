@@ -1,20 +1,35 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format, parse } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { Field } from "@/components/shared/field";
 import { FieldError } from "@/components/shared/field-error";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { type EventInput } from "@/hooks/use-events";
-import { isoToLocalInput, localInputToIso } from "@/lib/utils";
+import { cn, isoToLocalInput, localInputToIso } from "@/lib/utils";
 import { eventSchema, type EventFormValues } from "@/lib/schemas";
 import type { EventItem } from "@/lib/types";
+
+function parseStartsAt(val: string): { date: Date | undefined; time: string } {
+  if (!val) return { date: undefined, time: "" };
+  const [datePart, timePart] = val.split("T");
+  const parsed = parse(datePart, "yyyy-MM-dd", new Date());
+  return {
+    date: isNaN(parsed.getTime()) ? undefined : parsed,
+    time: timePart ?? "",
+  };
+}
 
 export function EventForm({
   event,
@@ -26,12 +41,20 @@ export function EventForm({
   submitLabel: string;
 }) {
   const [photo, setPhoto] = useState<File | null>(null);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+
+  const initialStartsAt = event ? isoToLocalInput(event.starts_at) : "";
+  const { date: initialDate, time: initialTime } = parseStartsAt(initialStartsAt);
+
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(initialDate);
+  const [selectedTime, setSelectedTime] = useState<string>(initialTime);
 
   const {
     register,
     handleSubmit,
     control,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<EventFormValues>({
     resolver: zodResolver(eventSchema),
@@ -41,7 +64,7 @@ export function EventForm({
           description: event.description,
           address: event.address,
           location_link: event.location_link,
-          starts_at: isoToLocalInput(event.starts_at),
+          starts_at: initialStartsAt,
           note: event.note,
           allow_companions: event.allow_companions,
           max_companions: event.max_companions,
@@ -50,6 +73,22 @@ export function EventForm({
   });
 
   const allowCompanions = watch("allow_companions");
+
+  function buildStartsAt(date: Date | undefined, time: string): string {
+    if (!date || !time) return "";
+    return `${format(date, "yyyy-MM-dd")}T${time}`;
+  }
+
+  function handleDateSelect(date: Date | undefined) {
+    setSelectedDate(date);
+    setCalendarOpen(false);
+    setValue("starts_at", buildStartsAt(date, selectedTime), { shouldValidate: true });
+  }
+
+  function handleTimeChange(time: string) {
+    setSelectedTime(time);
+    setValue("starts_at", buildStartsAt(selectedDate, time), { shouldValidate: true });
+  }
 
   const submit = handleSubmit(async (values) => {
     await onSubmit({
@@ -99,12 +138,43 @@ export function EventForm({
         <Field label="Endereço" error={errors.address?.message} required>
           <Input {...register("address")} placeholder="Rua, número, bairro" />
         </Field>
-        <Field
-          label="Data e horário"
-          error={errors.starts_at?.message}
-          required
-        >
-          <Input type="datetime-local" {...register("starts_at")} />
+
+        <Field label="Data e horário" error={errors.starts_at?.message} required>
+          <input type="hidden" {...register("starts_at")} />
+          <div className="flex gap-2">
+            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className={cn(
+                    "flex-1 justify-start text-left font-normal",
+                    !selectedDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
+                  {selectedDate
+                    ? format(selectedDate, "dd/MM/yyyy", { locale: ptBR })
+                    : "Selecione a data"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={handleDateSelect}
+                  disabled={{ before: new Date() }}
+                  locale={ptBR}
+                />
+              </PopoverContent>
+            </Popover>
+            <Input
+              type="time"
+              value={selectedTime}
+              onChange={(e) => handleTimeChange(e.target.value)}
+              className="w-32"
+            />
+          </div>
         </Field>
       </div>
 
@@ -171,4 +241,3 @@ export function EventForm({
     </form>
   );
 }
-
