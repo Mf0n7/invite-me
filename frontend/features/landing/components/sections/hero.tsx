@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import { PartyPopper } from "lucide-react";
+import { PartyPopper, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { staggerContainer, staggerItem } from "@/lib/animations/variants";
@@ -19,6 +19,16 @@ export function Hero() {
         initial="hidden"
         animate="visible"
       >
+        <motion.div variants={staggerItem}>
+          <motion.div
+            animate={{ y: [0, -8, 0], rotate: [-4, 4, -4] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="text-primary"
+          >
+            <Send className="size-9" strokeWidth={1.75} />
+          </motion.div>
+        </motion.div>
+
         <motion.span
           variants={staggerItem}
           className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-primary animate-pulse"

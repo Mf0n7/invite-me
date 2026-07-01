@@ -45,7 +45,7 @@ const jsonLd = {
 
 export default function Home() {
   return (
-    <>
+    <div className="cursor-plane">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -56,6 +56,6 @@ export default function Home() {
       <FeaturesSection />
       <CtaSection />
       <Footer />
-    </>
+    </div>
   );
 }
