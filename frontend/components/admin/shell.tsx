@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarHeart, CreditCard, LogOut, Shield, User, Menu, X } from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, Users, Wallet, X } from "lucide-react";
 import Link from "next/link";
-
 import { usePathname, useRouter } from "next/navigation";
 
-import { RequireAuth } from "@/components/auth/require-auth";
-import { DashboardFooter } from "@/components/dashboard/footer";
+import { RequireStaff } from "@/components/auth/require-staff";
 import { Logo } from "@/components/shared/logo";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -15,45 +13,29 @@ import { useAuth } from "@/context/auth";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  {
-    href: "/dashboard",
-    label: "Meus eventos",
-    icon: CalendarHeart,
-    exact: true,
-  },
-  {
-    href: "/dashboard/billing",
-    label: "Planos",
-    icon: CreditCard,
-    exact: false,
-  },
-  { href: "/dashboard/profile", label: "Perfil", icon: User, exact: false },
+  { href: "/admin", label: "Visão geral", icon: LayoutDashboard, exact: true },
+  { href: "/admin/users", label: "Usuários", icon: Users, exact: false },
+  { href: "/admin/billing", label: "Faturamento", icon: Wallet, exact: false },
 ];
 
-export function DashboardShell({ children }: { children: React.ReactNode }) {
-  const { user, logout } = useAuth();
+export function AdminShell({ children }: { children: React.ReactNode }) {
+  const { logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const nav = user?.is_staff
-    ? [...NAV, { href: "/admin", label: "Admin", icon: Shield, exact: false }]
-    : NAV;
 
   const isActive = (href: string, exact: boolean) =>
     exact ? pathname === href : pathname.startsWith(href);
 
   return (
-    <RequireAuth>
+    <RequireStaff>
       <div className="flex min-h-screen flex-col">
-        {/* Mobile sidebar */}
         <div
           className={cn(
             "fixed inset-0 z-40 md:hidden transition-all duration-300",
             mobileOpen ? "visible" : "invisible pointer-events-none",
           )}
         >
-          {/* Backdrop */}
           <div
             className={cn(
               "absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300",
@@ -62,7 +44,6 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             onClick={() => setMobileOpen(false)}
           />
 
-          {/* Panel */}
           <div
             className={cn(
               "absolute inset-0 flex flex-col bg-background transition-transform duration-300 ease-in-out",
@@ -70,7 +51,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             )}
           >
             <div className="flex h-14 items-center justify-between border-b border-border px-4">
-              <Logo href="/dashboard" onClick={() => setMobileOpen(false)} />
+              <Logo href="/admin" onClick={() => setMobileOpen(false)} />
               <Button
                 variant="ghost"
                 size="icon"
@@ -82,7 +63,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             </div>
 
             <nav className="flex flex-1 flex-col gap-1 p-4">
-              {nav.map(({ href, label, icon: Icon, exact }) => (
+              {NAV.map(({ href, label, icon: Icon, exact }) => (
                 <Link
                   key={href}
                   href={href}
@@ -119,7 +100,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
         <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">
           <div className="container flex h-14 items-center justify-between gap-2">
-            <Logo href="/dashboard" className="md:text-3xl" />
+            <div className="flex items-center gap-2">
+              <Logo href="/admin" className="md:text-3xl" />
+              <span className="hidden rounded-full border border-border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:inline-flex">
+                admin
+              </span>
+            </div>
             <div className="flex items-center gap-1">
               <span className="hidden md:inline-flex">
                 <ThemeToggle />
@@ -149,9 +135,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          {/* Desktop nav */}
           <nav className="container hidden gap-1 overflow-x-auto pb-2 md:flex">
-            {nav.map(({ href, label, icon: Icon, exact }) => (
+            {NAV.map(({ href, label, icon: Icon, exact }) => (
               <Link
                 key={href}
                 href={href}
@@ -170,8 +155,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </header>
 
         <main className="container flex-1 py-6 sm:py-8">{children}</main>
-        <DashboardFooter />
       </div>
-    </RequireAuth>
+    </RequireStaff>
   );
 }

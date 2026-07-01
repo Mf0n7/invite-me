@@ -5,6 +5,7 @@ export type User = {
   display_name: string;
   avatar_url: string;
   date_joined: string;
+  is_staff?: boolean;
 };
 
 export type AuthTokens = {
