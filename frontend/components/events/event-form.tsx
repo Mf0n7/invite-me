@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format, parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { Field } from "@/components/shared/field";
@@ -41,7 +41,18 @@ export function EventForm({
   submitLabel: string;
 }) {
   const [photo, setPhoto] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(event?.photo ?? null);
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  useEffect(() => {
+    if (!photo) {
+      setPreview(event?.photo ?? null);
+      return;
+    }
+    const url = URL.createObjectURL(photo);
+    setPreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [photo, event?.photo]);
 
   const initialStartsAt = event ? isoToLocalInput(event.starts_at) : "";
   const { date: initialDate, time: initialTime } = parseStartsAt(initialStartsAt);
@@ -122,16 +133,28 @@ export function EventForm({
       </Field>
 
       <Field label="Foto" error={undefined}>
-        <Input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
-        />
-        {event?.photo && !photo && (
-          <p className="text-xs text-muted-foreground">
-            Já existe uma foto. Envie outra para trocar.
-          </p>
-        )}
+        <div className="flex items-center gap-4">
+          {preview && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={preview}
+              alt="Prévia da foto do evento"
+              className="size-20 shrink-0 rounded-lg border border-border object-cover"
+            />
+          )}
+          <div className="flex-1 space-y-1">
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
+            />
+            {event?.photo && !photo && (
+              <p className="text-xs text-muted-foreground">
+                Já existe uma foto. Envie outra para trocar.
+              </p>
+            )}
+          </div>
+        </div>
       </Field>
 
       <div className="grid gap-5 sm:grid-cols-2">
