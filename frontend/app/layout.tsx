@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 
-import { Providers } from "@/lib/providers";
+import { Providers } from "@/context/providers";
 import "./globals.css";
 
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
-const display = Playfair_Display({ subsets: ["latin"], variable: "--font-display" });
+const display = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-display",
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://convida.app";
 
@@ -42,8 +45,9 @@ const keywords = [
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Convida — Convites online e confirmação de presença (RSVP) para festas",
-    template: "%s · Convida",
+    default:
+      "Convida — Convites online e confirmação de presença (RSVP) para festas",
+    template: "Convida | %s",
   },
   description,
   keywords,
@@ -69,14 +73,45 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   formatDetection: { telephone: false },
+  icons: {
+    icon: [
+      { url: "/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: { url: "/favicons/apple-touch-icon.png" },
+    other: [
+      {
+        rel: "android-chrome-192x192",
+        url: "/favicons/android-chrome-192x192.png",
+      },
+      {
+        rel: "android-chrome-512x512",
+        url: "/favicons/android-chrome-512x512.png",
+      },
+    ],
+  },
+  manifest: "/favicons/site.webmanifest",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="pt-BR" className={`${sans.variable} ${display.variable}`} suppressHydrationWarning>
+    <html
+      lang="pt-BR"
+      className={`${sans.variable} ${display.variable}`}
+      suppressHydrationWarning
+    >
       <body className="min-h-screen">
         <Providers>{children}</Providers>
       </body>

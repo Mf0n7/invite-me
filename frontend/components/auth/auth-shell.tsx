@@ -1,6 +1,5 @@
-import Link from "next/link";
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Logo } from "@/components/shared/logo";
 
 export function AuthShell({
   title,
@@ -15,12 +14,7 @@ export function AuthShell({
 }) {
   return (
     <main className="container flex min-h-screen flex-col items-center justify-center py-12">
-      <Link
-        href="/"
-        className="mb-8 font-display text-3xl font-semibold tracking-tight text-primary"
-      >
-        Convida
-      </Link>
+      <Logo className="mb-8 text-3xl tracking-tight" />
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>{title}</CardTitle>
@@ -33,17 +27,4 @@ export function AuthShell({
   );
 }
 
-export function Divider({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative my-2 flex items-center">
-      <span className="flex-grow border-t border-border" />
-      <span className="mx-3 text-xs uppercase tracking-wider text-muted-foreground">{children}</span>
-      <span className="flex-grow border-t border-border" />
-    </div>
-  );
-}
 
-export function FieldError({ message }: { message?: string }) {
-  if (!message) return null;
-  return <p className="text-xs text-destructive">{message}</p>;
-}
