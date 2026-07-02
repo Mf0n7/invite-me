@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { apiErrorMessage } from "@/lib/api";
 import { useDeleteInvitation, useUpdateInvitation } from "@/hooks/use-invitations";
 import type { Invitation } from "@/lib/types";
@@ -13,6 +14,7 @@ export function InvitationRow({ uuid, invitation }: { uuid: string; invitation: 
   const update = useUpdateInvitation(uuid);
   const remove = useDeleteInvitation(uuid);
   const [copied, setCopied] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const copy = async () => {
     await navigator.clipboard.writeText(invitation.public_url);
@@ -33,7 +35,6 @@ export function InvitationRow({ uuid, invitation }: { uuid: string; invitation: 
   };
 
   const del = async () => {
-    if (!confirm(`Excluir o convite de ${invitation.guest_name}?`)) return;
     try {
       await remove.mutateAsync(invitation.id);
       toast.success("Convite excluído.");
@@ -66,12 +67,21 @@ export function InvitationRow({ uuid, invitation }: { uuid: string; invitation: 
         type="button"
         variant="ghost"
         size="icon"
-        onClick={del}
+        onClick={() => setConfirmOpen(true)}
         title="Excluir"
         className="text-destructive"
       >
         <Trash2 />
       </Button>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title="Excluir convite"
+        description={`Excluir o convite de ${invitation.guest_name}?`}
+        confirmLabel="Excluir"
+        onConfirm={del}
+      />
     </li>
   );
 }

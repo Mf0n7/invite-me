@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { Input } from "@/components/ui/input";
 import { apiErrorMessage } from "@/lib/api";
 import { useEventLink, useEventRsvps, useRegenerateLink, useRsvpSummary } from "@/hooks/use-events";
@@ -35,6 +36,7 @@ export function InvitePanel({ uuid }: { uuid: string }) {
   const { data: rsvps } = useEventRsvps(uuid);
   const regenerate = useRegenerateLink(uuid);
   const [copied, setCopied] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const copy = async () => {
     if (!link) return;
@@ -45,7 +47,6 @@ export function InvitePanel({ uuid }: { uuid: string }) {
   };
 
   const handleRegenerate = async () => {
-    if (!confirm("Gerar um novo link? O link anterior deixará de funcionar.")) return;
     try {
       await regenerate.mutateAsync();
       toast.success("Novo link gerado. O anterior foi anulado.");
@@ -87,11 +88,21 @@ export function InvitePanel({ uuid }: { uuid: string }) {
             variant="ghost"
             size="sm"
             className="mt-2 text-muted-foreground"
-            onClick={handleRegenerate}
+            onClick={() => setConfirmOpen(true)}
             disabled={regenerate.isPending}
           >
             <RefreshCw className={regenerate.isPending ? "animate-spin" : ""} /> Gerar novo link
           </Button>
+
+          <ConfirmDialog
+            open={confirmOpen}
+            onOpenChange={setConfirmOpen}
+            title="Gerar novo link"
+            description="O link anterior deixará de funcionar."
+            confirmLabel="Gerar novo link"
+            destructive={false}
+            onConfirm={handleRegenerate}
+          />
         </div>
 
         <div>
