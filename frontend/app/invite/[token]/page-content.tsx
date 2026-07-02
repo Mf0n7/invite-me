@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarDays, CheckCircle2, MapPin, PartyPopper } from "lucide-react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -79,12 +80,15 @@ export default function InvitePage() {
     <main className="container flex min-h-screen flex-col items-center justify-center py-12">
       <Card className="w-full max-w-lg overflow-hidden">
         {event.photo && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={event.photo}
-            alt={event.title}
-            className="h-48 w-full object-cover"
-          />
+          <div className="relative h-48 w-full">
+            <Image
+              src={event.photo}
+              alt={event.title}
+              fill
+              sizes="(max-width: 640px) 100vw, 512px"
+              className="object-cover"
+            />
+          </div>
         )}
         <CardHeader>
           <p className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
