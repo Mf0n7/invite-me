@@ -3,10 +3,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { Gift, LinkIcon, Pencil, Trash2, Users } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { BackButton } from "@/components/shared/back-button";
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { EventForm } from "@/components/events/event-form";
 import { GiftPanel } from "@/components/events/gift-panel";
@@ -14,7 +15,12 @@ import { InvitePanel } from "@/components/events/invite-panel";
 import { NominalInvitesPanel } from "@/components/events/nominal-invites-panel";
 import { Button } from "@/components/ui/button";
 import { apiErrorMessage } from "@/lib/api";
-import { useDeleteEvent, useEvent, useUpdateEvent, type EventInput } from "@/hooks/use-events";
+import {
+  useDeleteEvent,
+  useEvent,
+  useUpdateEvent,
+  type EventInput,
+} from "@/hooks/use-events";
 
 const SECTIONS = [
   { id: "convite", label: "Link", icon: LinkIcon },
@@ -32,6 +38,7 @@ export default function EditEventPage() {
   const updateEvent = useUpdateEvent(uuid);
   const deleteEvent = useDeleteEvent();
   const qc = useQueryClient();
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
   useEffect(() => {
     const status = new URLSearchParams(window.location.search).get("checkout");
@@ -54,7 +61,6 @@ export default function EditEventPage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm("Excluir este evento? Esta ação não pode ser desfeita.")) return;
     try {
       await deleteEvent.mutateAsync(uuid);
       toast.success("Evento excluído.");
@@ -81,21 +87,31 @@ export default function EditEventPage() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleDelete}
+              onClick={() => setConfirmDeleteOpen(true)}
               className="shrink-0 text-destructive"
             >
-              <Trash2 className="size-4" /> <span className="hidden sm:inline">Excluir</span>
+              <Trash2 className="size-4" />{" "}
+              <span className="hidden sm:inline">Excluir</span>
             </Button>
           </div>
 
-          <nav className="sticky top-[6.5rem] z-20 -mx-4 mb-6 flex gap-1 overflow-x-auto border-b border-border bg-background/80 px-4 pb-2 backdrop-blur sm:top-[6.75rem]">
+          <ConfirmDialog
+            open={confirmDeleteOpen}
+            onOpenChange={setConfirmDeleteOpen}
+            title="Excluir evento"
+            description="Esta ação não pode ser desfeita."
+            confirmLabel="Excluir"
+            onConfirm={handleDelete}
+          />
+
+          <nav className="sticky top-14 z-20 mb-6 grid w-full grid-cols-2 gap-1.5 rounded-2xl border border-border bg-background/80 p-1.5 text-xs backdrop-blur sm:flex sm:w-fit sm:gap-1 sm:text-sm md:top-24">
             {SECTIONS.map(({ id, label, icon: Icon }) => (
               <a
                 key={id}
                 href={`#${id}`}
-                className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                className="flex items-center justify-center gap-1.5 rounded-xl border border-border px-2.5 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground sm:shrink-0 sm:justify-start sm:rounded-full sm:border-none sm:px-3 sm:py-1.5"
               >
-                <Icon className="size-4" /> {label}
+                <Icon className="size-4 shrink-0" /> {label}
               </a>
             ))}
           </nav>
@@ -111,7 +127,11 @@ export default function EditEventPage() {
               <GiftPanel uuid={uuid} />
             </section>
             <section id="dados" className="scroll-mt-40">
-              <EventForm event={event} onSubmit={handleSubmit} submitLabel="Salvar alterações" />
+              <EventForm
+                event={event}
+                onSubmit={handleSubmit}
+                submitLabel="Salvar alterações"
+              />
             </section>
           </div>
         </>
