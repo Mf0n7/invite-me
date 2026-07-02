@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { Input } from "@/components/ui/input";
 import { apiErrorMessage } from "@/lib/api";
 import { useCreateGift, useDeleteGift, useGifts } from "@/hooks/use-gifts";
@@ -15,6 +16,7 @@ export function GiftManager({ uuid }: { uuid: string }) {
   const remove = useDeleteGift(uuid);
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
 
   const items = data?.items ?? [];
 
@@ -31,7 +33,6 @@ export function GiftManager({ uuid }: { uuid: string }) {
   };
 
   const del = async (id: number) => {
-    if (!confirm("Excluir este presente?")) return;
     try {
       await remove.mutateAsync(id);
       toast.success("Presente excluído.");
@@ -75,7 +76,7 @@ export function GiftManager({ uuid }: { uuid: string }) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => del(g.id)}
+                  onClick={() => setPendingDeleteId(g.id)}
                   className="text-destructive"
                   title="Excluir"
                 >
@@ -86,6 +87,17 @@ export function GiftManager({ uuid }: { uuid: string }) {
           })}
         </ul>
       )}
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        onOpenChange={(open) => !open && setPendingDeleteId(null)}
+        title="Excluir presente"
+        description="Excluir este presente?"
+        confirmLabel="Excluir"
+        onConfirm={() => {
+          if (pendingDeleteId !== null) del(pendingDeleteId);
+        }}
+      />
     </div>
   );
 }
