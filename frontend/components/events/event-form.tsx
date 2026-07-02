@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format, parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -135,10 +136,12 @@ export function EventForm({
       <Field label="Foto" error={undefined}>
         <div className="flex items-center gap-4">
           {preview && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={preview}
               alt="Prévia da foto do evento"
+              width={80}
+              height={80}
+              unoptimized={preview.startsWith("blob:")}
               className="size-20 shrink-0 rounded-lg border border-border object-cover"
             />
           )}
