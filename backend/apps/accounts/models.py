@@ -12,6 +12,7 @@ class User(AbstractUser):
     email = models.EmailField(_("e-mail"), unique=True)
     full_name = models.CharField(_("nome completo"), max_length=150, blank=True)
     avatar_url = models.URLField(_("avatar"), blank=True)
+    deleted_at = models.DateTimeField(_("excluído em"), null=True, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

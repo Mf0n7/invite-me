@@ -34,6 +34,7 @@ api_v1 = [
     path("", include("apps.rsvps.urls")),
     path("", include("apps.gifts.urls")),
     path("", include("apps.billing.urls")),
+    path("", include("apps.administration.urls")),
 ]
 
 urlpatterns = [

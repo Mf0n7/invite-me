@@ -10,6 +10,7 @@ class SubscriptionPlan(models.Model):
     """Faixa de assinatura recorrente — espelha um Price recorrente do Stripe."""
 
     capacity = models.PositiveIntegerField(_("capacidade"), unique=True)
+    name = models.CharField(_("nome comercial"), max_length=60, blank=True)
     amount_cents = models.PositiveIntegerField(_("valor (centavos)"))
     stripe_price_id = models.CharField(max_length=100, blank=True)
     active = models.BooleanField(default=True)

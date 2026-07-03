@@ -23,6 +23,20 @@ EVENT_TIER_PRICES = {
 
 PAID_TIERS = sorted(EVENT_TIER_PRICES)
 
+# Nomes comerciais das faixas de assinatura (editável — só apresentação).
+PLAN_NAMES = {
+    50: "Básico",
+    100: "Essencial",
+    150: "Plus",
+    200: "Pro",
+    250: "Avançado",
+    300: "Premium",
+    350: "Master",
+    400: "Business",
+    450: "Enterprise",
+    500: "Ultimate",
+}
+
 # Addon de lista de presentes (avulso por evento). Incluído em assinaturas ativas.
 GIFT_ADDON_PRICE_CENTS = 500
 
@@ -47,3 +61,8 @@ def price_cents(capacity: int) -> int:
 
 def tier_label(capacity: int) -> str:
     return f"Faixa até {capacity} convidados"
+
+
+def plan_name(capacity: int) -> str:
+    """Nome comercial da faixa de assinatura (fallback: 'Até N')."""
+    return PLAN_NAMES.get(capacity, f"Até {capacity}")
