@@ -132,6 +132,43 @@ export type Invitation = {
   public_url: string;
 };
 
+export type AdminPlanBreakdown = {
+  name: string;
+  subscribers: number;
+  mrr_cents: number;
+};
+
+export type AdminOverview = {
+  mrr_cents: number;
+  active_subscriptions: number;
+  active_users_30d: number;
+  new_users_30d: number;
+  plan_breakdown: AdminPlanBreakdown[];
+};
+
+export type AdminUser = {
+  id: number;
+  full_name: string;
+  email: string;
+  plan: string | null;
+  status: "ativo" | "inativo";
+  date_joined: string;
+};
+
+export type AdminPayment = {
+  id: number;
+  user: string;
+  plan: string;
+  amount_cents: number;
+  created_at: string;
+};
+
+export type AdminBilling = {
+  monthly_revenue_cents: number;
+  event_purchases_cents: number;
+  recent_payments: AdminPayment[];
+};
+
 export type PublicEvent = {
   uuid: string;
   title: string;
