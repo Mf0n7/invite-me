@@ -1,6 +1,7 @@
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -22,15 +23,19 @@ class GoogleLogin(SocialLoginView):
 
 @extend_schema(tags=["Conta & Autenticação"])
 class DeleteAccountView(APIView):
-    """Exclui a própria conta do usuário autenticado (ação irreversível).
+    """Exclui a própria conta do usuário autenticado (soft delete).
 
-    O endpoint padrão /auth/user/ (dj-rest-auth) não aceita DELETE — por isso
-    esta rota dedicada. A identidade é garantida pelo JWT; após excluir, os
-    tokens do usuário deixam de autenticar (o usuário não existe mais).
+    Em vez de apagar o registro, desativa a conta (is_active=False) e marca
+    deleted_at — preserva o histórico (eventos, confirmações, logs). O endpoint
+    padrão /auth/user/ (dj-rest-auth) não aceita DELETE, por isso esta rota
+    dedicada. Conta desativada não consegue mais logar (Django bloqueia inativo).
     """
 
     permission_classes = [IsAuthenticated]
 
     def delete(self, request):
-        request.user.delete()
+        user = request.user
+        user.is_active = False
+        user.deleted_at = timezone.now()
+        user.save(update_fields=["is_active", "deleted_at"])
         return Response(status=status.HTTP_204_NO_CONTENT)
