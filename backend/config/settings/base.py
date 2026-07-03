@@ -51,6 +51,7 @@ LOCAL_APPS = [
     "apps.rsvps",
     "apps.gifts",
     "apps.billing",
+    "apps.administration",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -170,6 +171,13 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "0.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
+    "TAGS": [
+        {
+            "name": "Administração",
+            "description": "Painel de superusuário/staff — agregações de "
+            "faturamento, usuários e visão geral (is_staff).",
+        },
+    ],
 }
 
 # ---------------------------------------------------------------- CORS / CSRF
