@@ -43,8 +43,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "email", "full_name", "display_name", "avatar_url", "date_joined"]
-        read_only_fields = ["id", "email", "date_joined"]
+        fields = ["id", "email", "full_name", "display_name", "avatar_url", "date_joined", "is_staff"]
+        read_only_fields = ["id", "email", "date_joined", "is_staff"]
 
     def get_display_name(self, obj) -> str:
         return obj.get_display_name()
