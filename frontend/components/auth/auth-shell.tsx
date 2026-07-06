@@ -14,7 +14,9 @@ export function AuthShell({
 }) {
   return (
     <main className="container flex min-h-screen flex-col items-center justify-center py-12">
-      <Logo className="mb-8 text-3xl tracking-tight" />
+      <div className="mb-8">
+        <Logo className="text-3xl tracking-tight" />
+      </div>
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>{title}</CardTitle>
