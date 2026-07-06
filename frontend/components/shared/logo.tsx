@@ -19,7 +19,7 @@ export function Logo({
       <Image src="/logo-convida.svg" alt="" width={35} height={35} />
       <span
         className={cn(
-          "font-display text-2xl font-semibold text-primary",
+          "text-2xl font-semibold text-primary",
           hideTextOnMobile && "hidden md:inline",
           className,
         )}

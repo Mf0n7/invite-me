@@ -1,11 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { LayoutDashboard, LogOut, Menu, Users, Wallet, X } from "lucide-react";
+import {
+  ArrowLeft,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  Users,
+  Wallet,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 import { RequireStaff } from "@/components/auth/require-staff";
+import { DashboardFooter } from "@/components/dashboard/footer";
 import { Logo } from "@/components/shared/logo";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -81,19 +90,30 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               ))}
             </nav>
 
-            <div className="flex items-center justify-between border-t border-border p-4">
-              <ThemeToggle />
-              <Button
-                variant="ghost"
-                className="gap-2 text-muted-foreground"
-                onClick={() => {
-                  logout();
-                  router.push("/");
-                }}
+            <div className="flex flex-col gap-2 border-t border-border p-4">
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
               >
-                <LogOut className="size-4" />
-                Sair
-              </Button>
+                <ArrowLeft className="size-4" />
+                Meu painel
+              </Link>
+
+              <div className="flex items-center justify-between">
+                <ThemeToggle />
+                <Button
+                  variant="ghost"
+                  className="gap-2 text-muted-foreground"
+                  onClick={() => {
+                    logout();
+                    router.push("/");
+                  }}
+                >
+                  <LogOut className="size-4" />
+                  Sair
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -107,6 +127,17 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               </span>
             </div>
             <div className="flex items-center gap-1">
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="hidden gap-2 text-muted-foreground md:inline-flex"
+              >
+                <Link href="/dashboard">
+                  <ArrowLeft className="size-4" />
+                  Meu painel
+                </Link>
+              </Button>
               <span className="hidden md:inline-flex">
                 <ThemeToggle />
               </span>
@@ -155,6 +186,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </header>
 
         <main className="container flex-1 py-6 sm:py-8">{children}</main>
+        <DashboardFooter />
       </div>
     </RequireStaff>
   );

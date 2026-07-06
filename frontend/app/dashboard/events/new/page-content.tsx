@@ -27,7 +27,7 @@ export default function NewEventPage() {
   return (
     <DashboardShell>
       <BackButton href="/dashboard" />
-      <h1 className="mb-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight sm:text-3xl">
         Novo evento
       </h1>
       <div className="max-w-2xl">

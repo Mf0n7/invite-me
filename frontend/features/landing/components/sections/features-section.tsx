@@ -44,7 +44,7 @@ export function FeaturesSection() {
           <p className="mb-3 text-xs uppercase tracking-[0.18em] text-primary">
             o que você ganha
           </p>
-          <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
             Tudo que a festa precisa
           </h2>
         </motion.div>

@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { useLenis } from "@/context/lenis";
 import { cn } from "@/lib/utils";
 
 import { NAV, AUTH } from "./nav-links";
@@ -17,6 +18,8 @@ export function MobileSheet({
   open: boolean;
   onClose: () => void;
 }) {
+  const lenis = useLenis();
+
   return (
     <div
       className={cn(
@@ -60,8 +63,12 @@ export function MobileSheet({
             <a
               key={href}
               href={href}
-              onClick={onClose}
-              className="rounded-xl px-4 py-3 text-8xl font-bold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              onClick={(e) => {
+                e.preventDefault();
+                onClose();
+                lenis?.scrollTo(href, { offset: -56 });
+              }}
+              className="rounded-xl px-4 py-3 text-2xl font-bold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
               {label}
             </a>

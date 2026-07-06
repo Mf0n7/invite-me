@@ -12,7 +12,7 @@ export default function AdminBillingPage() {
   return (
     <AdminShell>
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           Faturamento
         </h1>
         <p className="text-sm text-muted-foreground">

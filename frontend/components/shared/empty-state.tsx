@@ -8,7 +8,7 @@ export function EmptyState() {
   return (
     <Card className="flex flex-col items-center justify-center py-16 text-center">
       <CardContent className="pt-6">
-        <p className="font-display text-xl">Nenhum evento ainda</p>
+        <p className="font-semibold text-xl">Nenhum evento ainda</p>
         <p className="mt-1 text-sm text-muted-foreground">
           Que tal criar o primeiro? Leva menos de um minuto.
         </p>
