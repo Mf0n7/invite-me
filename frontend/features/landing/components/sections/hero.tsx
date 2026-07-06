@@ -38,7 +38,7 @@ export function Hero() {
 
         <motion.h1
           variants={staggerItem}
-          className="font-display text-5xl leading-tight font-semibold tracking-tight sm:text-6xl sm:leading-none lg:text-7xl"
+          className="text-5xl leading-tight font-semibold tracking-tight sm:text-6xl sm:leading-none lg:text-7xl"
         >
           Faça sua <em className="text-primary">festa</em> acontecer
         </motion.h1>

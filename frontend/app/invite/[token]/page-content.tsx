@@ -68,7 +68,7 @@ export default function InvitePage() {
   if (isError || !event) {
     return (
       <Centered>
-        <p className="font-display text-2xl">Convite indisponível</p>
+        <p className="font-semibold text-2xl">Convite indisponível</p>
         <p className="mt-2 text-sm text-muted-foreground">
           Este link pode ter expirado ou sido substituído por um novo.
         </p>
@@ -133,7 +133,7 @@ export default function InvitePage() {
           {confirmedName ? (
             <div className="flex flex-col items-center py-6 text-center">
               <CheckCircle2 className="size-12 text-primary" />
-              <p className="mt-3 font-display text-xl">Presença confirmada!</p>
+              <p className="mt-3 font-semibold text-xl">Presença confirmada!</p>
               <p className="text-sm text-muted-foreground">
                 Até lá, {confirmedName}. 🎉
               </p>
@@ -199,7 +199,7 @@ export default function InvitePage() {
         </CardContent>
       </Card>
       <p className="mt-6 text-xs text-muted-foreground/70">
-        Powered by <span className="font-display text-primary">Convida</span>
+        Powered by <span className="font-semibold text-primary">Convida</span>
       </p>
     </main>
   );

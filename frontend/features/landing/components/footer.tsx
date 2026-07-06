@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 
 import { Logo } from "@/components/shared/logo";
 import { Separator } from "@/components/ui/separator";
+import { useLenis } from "@/context/lenis";
 
 const navigation = [
   { href: "#", label: "Início" },
@@ -15,6 +18,8 @@ const account = [
 ];
 
 export function Footer() {
+  const lenis = useLenis();
+
   return (
     <footer className="border-t bg-card/30">
       <div className="container py-12">
@@ -40,6 +45,14 @@ export function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (item.href === "#") {
+                        lenis?.scrollTo(0);
+                      } else {
+                        lenis?.scrollTo(item.href, { offset: -56 });
+                      }
+                    }}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {item.label}

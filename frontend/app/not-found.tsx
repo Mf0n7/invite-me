@@ -17,7 +17,7 @@ export default function NotFound() {
         animate="visible"
       >
         <motion.span
-          className="font-display text-[10rem] leading-none font-bold text-primary select-none"
+          className="text-[10rem] leading-none font-bold text-primary select-none"
           variants={scalePop}
         >
           404

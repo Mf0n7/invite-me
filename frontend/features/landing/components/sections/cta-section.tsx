@@ -16,7 +16,7 @@ export function CtaSection() {
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
       >
-        <h2 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           Sua próxima festa
           <br />
           começa aqui.

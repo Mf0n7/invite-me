@@ -24,7 +24,7 @@ export default function AdminOverviewPage() {
   return (
     <AdminShell>
       <div className="mb-8">
-        <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           Visão geral
         </h1>
         <p className="text-sm text-muted-foreground">

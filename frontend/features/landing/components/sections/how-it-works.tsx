@@ -37,7 +37,7 @@ export function HowItWorks() {
           <p className="mb-3 text-xs uppercase tracking-[0.18em] text-primary">
             como funciona
           </p>
-          <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
             Três passos para a festa perfeita
           </h2>
         </motion.div>
@@ -56,7 +56,7 @@ export function HowItWorks() {
                   {step.label}
                 </span>
               </div>
-              <h3 className="mb-2 font-display text-xl font-semibold">
+              <h3 className="mb-2 text-xl font-semibold">
                 {step.title}
               </h3>
               <p className="text-sm leading-relaxed text-muted-foreground">

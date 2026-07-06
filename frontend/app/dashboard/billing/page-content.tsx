@@ -18,7 +18,7 @@ export default function BillingPage() {
 
   return (
     <DashboardShell>
-      <h1 className="mb-1 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+      <h1 className="mb-1 text-2xl font-semibold tracking-tight sm:text-3xl">
         Planos
       </h1>
       <p className="mb-6 text-sm text-muted-foreground">
