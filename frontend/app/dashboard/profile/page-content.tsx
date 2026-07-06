@@ -112,7 +112,7 @@ export default function ProfilePage() {
 
   return (
     <DashboardShell>
-      <h1 className="mb-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight sm:text-3xl">
         Perfil
       </h1>
 
@@ -206,7 +206,7 @@ export default function ProfilePage() {
                 {requestReset.isPending ? "Enviando…" : "Alterar senha"}
               </Button>
               <Button
-                variant="ghost"
+                variant="outline"
                 className="text-muted-foreground"
                 onClick={() => {
                   logout();

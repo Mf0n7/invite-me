@@ -61,7 +61,7 @@ export default function NominalInvitePage() {
   if (isError || !data) {
     return (
       <Centered>
-        <p className="font-display text-2xl">Convite não encontrado</p>
+        <p className="font-semibold text-2xl">Convite não encontrado</p>
         <p className="mt-2 text-sm text-muted-foreground">
           Verifique o link com quem te convidou.
         </p>
@@ -127,7 +127,7 @@ export default function NominalInvitePage() {
           {done || alreadyConfirmed ? (
             <div className="flex flex-col items-center py-6 text-center">
               <CheckCircle2 className="size-12 text-primary" />
-              <p className="mt-3 font-display text-xl">
+              <p className="mt-3 font-semibold text-xl">
                 {done ? "Presença confirmada!" : "Presença já confirmada"}
               </p>
               <p className="text-sm text-muted-foreground">
@@ -200,7 +200,7 @@ export default function NominalInvitePage() {
         </CardContent>
       </Card>
       <p className="mt-6 text-xs text-muted-foreground/70">
-        Powered by <span className="font-display text-primary">Convida</span>
+        Powered by <span className="font-semibold text-primary">Convida</span>
       </p>
     </main>
   );

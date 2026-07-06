@@ -81,7 +81,7 @@ export default function EditEventPage() {
       ) : (
         <>
           <div className="mb-5 flex items-start justify-between gap-4">
-            <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+            <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               {event.title}
             </h1>
             <Button

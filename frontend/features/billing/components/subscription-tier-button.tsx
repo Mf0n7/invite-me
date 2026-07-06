@@ -37,7 +37,7 @@ export function SubscriptionTierButton({
       }`}
     >
       <p className="text-sm font-medium">até {tier.capacity}</p>
-      <p className="font-display text-lg">
+      <p className="font-semibold text-lg">
         {formatBRL(tier.subscription_cents)}
         <span className="text-xs text-muted-foreground">/mês</span>
       </p>
