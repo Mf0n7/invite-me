@@ -35,7 +35,7 @@ export function Header() {
         <div className="h-0.5 bg-gradient-to-r from-primary via-primary/50 to-[hsl(var(--celebrate))]" />
 
         <div className="container flex h-14 items-center justify-between gap-4">
-          <Logo href="/" />
+          <Logo href="/" hideTextOnMobile />
           <DesktopNav />
           <MobileNav onOpen={() => setMobileOpen(true)} />
         </div>
