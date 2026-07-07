@@ -5,7 +5,11 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { scalePop, staggerContainer, staggerItem } from "@/lib/animations/variants";
+import {
+  scalePop,
+  staggerContainer,
+  staggerItem,
+} from "@/lib/animations/variants";
 
 export default function NotFound() {
   return (
@@ -34,7 +38,7 @@ export default function NotFound() {
 
         <motion.div variants={staggerItem}>
           <Button asChild>
-            <Link href="/">
+            <Link href="/dashboard">
               <ArrowLeft className="w-4 h-4" />
               Voltar ao início
             </Link>

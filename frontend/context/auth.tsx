@@ -10,6 +10,7 @@ type AuthContextValue = {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  sessionExpired: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
   loginWithGoogle: (code: string) => Promise<void>;
@@ -93,12 +94,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       user: userQuery.data ?? null,
       isLoading: !ready || (!!token && userQuery.isLoading),
       isAuthenticated: !!userQuery.data,
+      sessionExpired: !!token && userQuery.isError,
       login,
       register,
       loginWithGoogle,
       logout,
     }),
-    [ready, token, userQuery.data, userQuery.isLoading, login, register, loginWithGoogle, logout],
+    [
+      ready,
+      token,
+      userQuery.data,
+      userQuery.isLoading,
+      userQuery.isError,
+      login,
+      register,
+      loginWithGoogle,
+      logout,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
