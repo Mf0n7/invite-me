@@ -1,6 +1,9 @@
 "use client";
 
+import { Shield } from "lucide-react";
+
 import { DashboardShell } from "@/components/dashboard/shell";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatBRL } from "@/lib/utils";
 import { PlanRow } from "@/components/billing/plan-row";
 import { PriceCell } from "@/components/billing/price-cell";
@@ -9,12 +12,37 @@ import { SubscriptionTierButton } from "@/features/billing/components/subscripti
 import { GiftAddonCard } from "@/features/billing/components/gift-addon-card";
 import { useBillingPage } from "@/features/billing/hooks/use-billing-page";
 import { useCheckoutToast } from "@/features/billing/hooks/use-checkout-toast";
+import { useAuth } from "@/context/auth";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function BillingPage() {
   const { tiers, sub, onSubscribe, onManage, isSubscribing, isOpeningPortal } =
     useBillingPage();
+  const { user } = useAuth();
 
   useCheckoutToast();
+
+  if (user?.is_staff) {
+    return (
+      <DashboardShell>
+        <Card className="flex flex-col items-center justify-center py-16 text-center">
+          <CardContent className="pt-6">
+            <Shield className="mx-auto mb-4 h-10 w-10 text-primary" />
+            <p className="text-xl font-semibold">
+              Você é admin da plataforma e pode usar à vontade!
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              0 custo e serviço ilimitado.
+            </p>
+            <Button asChild className="mt-6">
+              <Link href="/dashboard">Ir para eventos</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </DashboardShell>
+    );
+  }
 
   return (
     <DashboardShell>
