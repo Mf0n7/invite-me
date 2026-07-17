@@ -68,7 +68,7 @@ export function MobileSheet({
                 onClose();
                 lenis?.scrollTo(href, { offset: -56 });
               }}
-              className="rounded-xl px-4 py-3 text-2xl font-bold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              className="rounded-xl px-4 py-3 text-xl font-bold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
               {label}
             </a>
