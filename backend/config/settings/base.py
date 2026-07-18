@@ -109,6 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 SITE_ID = 1
 
+ACCOUNT_ADAPTER = "apps.accounts.adapters.AccountAdapter"
 SOCIALACCOUNT_ADAPTER = "apps.accounts.adapters.SocialAccountAdapter"
 
 AUTHENTICATION_BACKENDS = [
