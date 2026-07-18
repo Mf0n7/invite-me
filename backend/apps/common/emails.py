@@ -121,8 +121,6 @@ def render_email_layout(preview_text: str, body_html: str) -> str:
                   Você recebeu este e-mail porque possui uma conta no Convida.
                 </p>
                 <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:{EMAIL_COLORS["muted_foreground"]};">
-                  <a href="mailto:suporte@convida.app" style="color:{EMAIL_COLORS["muted_foreground"]};">suporte@convida.app</a>
-                  &nbsp;·&nbsp;
                   &copy; {year} Convida
                 </p>
               </td>
