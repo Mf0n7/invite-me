@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import posthog from "posthog-js";
 import { toast } from "sonner";
 
 import { BackButton } from "@/components/shared/back-button";
@@ -16,9 +17,16 @@ export default function NewEventPage() {
   const handleSubmit = async (input: EventInput) => {
     try {
       const created = await createEvent.mutateAsync(input);
+      posthog.capture("event_created", {
+        event_id: created.uuid,
+        allows_companions: input.allow_companions,
+        max_companions: input.max_companions,
+        has_photo: input.photo instanceof File,
+      });
       toast.success("Evento criado!");
       router.push(`/dashboard/events/${created.uuid}/edit`);
     } catch (err) {
+      posthog.captureException(err);
       toast.error(apiErrorMessage(err, "Não foi possível criar o evento."));
       throw err;
     }

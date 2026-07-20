@@ -3,6 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { Gift, LinkIcon, Pencil, Trash2, Users } from "lucide-react";
+import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -53,8 +54,15 @@ export default function EditEventPage() {
   const handleSubmit = async (input: EventInput) => {
     try {
       await updateEvent.mutateAsync(input);
+      posthog.capture("event_updated", {
+        event_id: uuid,
+        allows_companions: input.allow_companions,
+        max_companions: input.max_companions,
+        has_new_photo: input.photo instanceof File,
+      });
       toast.success("Alterações salvas.");
     } catch (err) {
+      posthog.captureException(err);
       toast.error(apiErrorMessage(err, "Não foi possível salvar."));
       throw err;
     }
@@ -63,9 +71,11 @@ export default function EditEventPage() {
   const handleDelete = async () => {
     try {
       await deleteEvent.mutateAsync(uuid);
+      posthog.capture("event_deleted", { event_id: uuid });
       toast.success("Evento excluído.");
       router.push("/dashboard");
     } catch (err) {
+      posthog.captureException(err);
       toast.error(apiErrorMessage(err, "Não foi possível excluir."));
     }
   };
