@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
+import posthog from "posthog-js";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -24,10 +25,15 @@ export function GiftManager({ uuid }: { uuid: string }) {
     if (!title.trim()) return;
     try {
       await create.mutateAsync({ title: title.trim(), url: url.trim() || undefined });
+      posthog.capture("gift_added", {
+        event_id: uuid,
+        has_store_url: Boolean(url.trim()),
+      });
       setTitle("");
       setUrl("");
       toast.success("Presente adicionado.");
     } catch (err) {
+      posthog.captureException(err);
       toast.error(apiErrorMessage(err, "Não foi possível adicionar."));
     }
   };

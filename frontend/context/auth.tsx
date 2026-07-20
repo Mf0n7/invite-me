@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import posthog from "posthog-js";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { apiFetch, tokenStore } from "@/lib/api";
@@ -47,6 +48,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [qc],
   );
 
+  const identifyUser = useCallback((user: User) => {
+    posthog.identify(String(user.id), {
+      email: user.email,
+      name: user.full_name || user.display_name || undefined,
+      is_staff: user.is_staff,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (userQuery.data) identifyUser(userQuery.data);
+  }, [identifyUser, userQuery.data]);
+
   const login = useCallback(
     async (email: string, password: string) => {
       const data = await apiFetch<AuthTokens>("/auth/login/", {
@@ -55,8 +68,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: { email, password },
       });
       applyTokens(data);
+      if (data.user) identifyUser(data.user);
+      posthog.capture("user_logged_in", { authentication_method: "email" });
     },
-    [applyTokens],
+    [applyTokens, identifyUser],
   );
 
   const register = useCallback(
@@ -67,8 +82,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: payload,
       });
       applyTokens(data);
+      if (data.user) identifyUser(data.user);
+      posthog.capture("user_signed_up", { authentication_method: "email" });
     },
-    [applyTokens],
+    [applyTokens, identifyUser],
   );
 
   const loginWithGoogle = useCallback(
@@ -79,11 +96,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: { code },
       });
       applyTokens(data);
+      if (data.user) identifyUser(data.user);
+      posthog.capture("user_logged_in", { authentication_method: "google" });
     },
-    [applyTokens],
+    [applyTokens, identifyUser],
   );
 
   const logout = useCallback(() => {
+    posthog.capture("user_logged_out");
+    posthog.reset();
     tokenStore.clear();
     setToken(null);
     qc.removeQueries({ queryKey: USER_KEY });

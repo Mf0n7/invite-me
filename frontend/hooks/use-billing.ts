@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
+import posthog from "posthog-js";
 
 import { apiFetch } from "@/lib/api";
 import type { SubscriptionInfo, TiersResponse } from "@/lib/types";
@@ -27,7 +28,12 @@ export function useEventCheckout(uuid: string) {
         method: "POST",
         body: { capacity },
       }),
-    onSuccess: (data) => {
+    onSuccess: (data, capacity) => {
+      posthog.capture("checkout_started", {
+        checkout_type: "event",
+        event_id: uuid,
+        capacity,
+      });
       window.location.href = data.checkout_url;
     },
   });
@@ -40,7 +46,11 @@ export function useSubscriptionCheckout() {
         method: "POST",
         body: { capacity },
       }),
-    onSuccess: (data) => {
+    onSuccess: (data, capacity) => {
+      posthog.capture("checkout_started", {
+        checkout_type: "subscription",
+        capacity,
+      });
       window.location.href = data.checkout_url;
     },
   });
