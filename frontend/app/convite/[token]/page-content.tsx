@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarDays, CheckCircle2, MapPin, PartyPopper } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import posthog from "posthog-js";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -52,7 +53,12 @@ export default function NominalInvitePage() {
     try {
       await confirm.mutateAsync(values.companions.map((c) => c.name));
       setDone(true);
+      posthog.capture("nominal_rsvp_confirmed", {
+        companion_count: values.companions.length,
+        allows_companions: data?.event.allow_companions ?? false,
+      });
     } catch (err) {
+      posthog.captureException(err);
       setFormError(apiErrorMessage(err, "Não foi possível confirmar."));
     }
   };

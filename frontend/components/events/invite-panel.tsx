@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Copy, RefreshCw, Users } from "lucide-react";
+import posthog from "posthog-js";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -41,6 +42,7 @@ export function InvitePanel({ uuid }: { uuid: string }) {
   const copy = async () => {
     if (!link) return;
     await navigator.clipboard.writeText(link.public_url);
+    posthog.capture("invite_link_copied", { event_id: uuid });
     setCopied(true);
     toast.success("Link copiado!");
     setTimeout(() => setCopied(false), 2000);
@@ -51,6 +53,7 @@ export function InvitePanel({ uuid }: { uuid: string }) {
       await regenerate.mutateAsync();
       toast.success("Novo link gerado. O anterior foi anulado.");
     } catch (err) {
+      posthog.captureException(err);
       toast.error(apiErrorMessage(err, "Não foi possível regenerar o link."));
     }
   };

@@ -1,6 +1,7 @@
 "use client";
 
 import { Upload, UserPlus } from "lucide-react";
+import posthog from "posthog-js";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -28,9 +29,11 @@ export function NominalInvitesPanel({ uuid }: { uuid: string }) {
     if (!name.trim()) return;
     try {
       await create.mutateAsync(name.trim());
+      posthog.capture("invitation_created", { event_id: uuid });
       setName("");
       toast.success("Convite criado.");
     } catch (err) {
+      posthog.captureException(err);
       toast.error(apiErrorMessage(err, "Não foi possível criar o convite."));
     }
   };
@@ -40,8 +43,14 @@ export function NominalInvitesPanel({ uuid }: { uuid: string }) {
     if (!file) return;
     try {
       const res = await importFile.mutateAsync(file);
+      posthog.capture("invitations_imported", {
+        event_id: uuid,
+        invitation_count: res.created,
+        file_type: file.name.split(".").pop()?.toLowerCase(),
+      });
       toast.success(`${res.created} convidado(s) importado(s).`);
     } catch (err) {
+      posthog.captureException(err);
       toast.error(apiErrorMessage(err, "Falha ao importar a planilha."));
     } finally {
       if (fileRef.current) fileRef.current.value = "";

@@ -1,6 +1,7 @@
 "use client";
 
 import { Gift } from "lucide-react";
+import posthog from "posthog-js";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -21,8 +22,10 @@ export function GiftSection({ token }: { token: string }) {
     setPendingId(id);
     try {
       await claim.mutateAsync({ id, name: name.trim() });
+      posthog.capture("gift_claimed", { gift_id: id });
       toast.success("Presente reservado! Obrigado 🎁");
     } catch (err) {
+      posthog.captureException(err);
       toast.error(apiErrorMessage(err, "Não foi possível reservar."));
     } finally {
       setPendingId(null);

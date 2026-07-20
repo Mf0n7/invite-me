@@ -3,6 +3,7 @@
 import { useState } from "react";
 import {
   ArrowLeft,
+  Calendar,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -25,6 +26,7 @@ const NAV = [
   { href: "/admin", label: "Visão geral", icon: LayoutDashboard, exact: true },
   { href: "/admin/users", label: "Usuários", icon: Users, exact: false },
   { href: "/admin/billing", label: "Faturamento", icon: Wallet, exact: false },
+  { href: "/admin/events", label: "Eventos", icon: Calendar, exact: false },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
