@@ -2,12 +2,14 @@
 
 import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
+import Image from "next/image";
 
 import { AdminShell } from "@/components/admin/shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useAdminUsers } from "@/hooks/use-admin";
 import { cn, formatDateTime } from "@/lib/utils";
+import defaultAvatar from "@/app/icon.png";
 
 export default function AdminUsersPage() {
   const [query, setQuery] = useState("");
@@ -18,7 +20,9 @@ export default function AdminUsersPage() {
     const q = query.trim().toLowerCase();
     if (!q) return users;
     return users.filter(
-      (u) => u.full_name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q),
+      (user) =>
+        user.full_name.toLowerCase().includes(q) ||
+        user.email.toLowerCase().includes(q),
     );
   }, [query, users]);
 
@@ -60,6 +64,7 @@ export default function AdminUsersPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border text-left text-muted-foreground">
+                  <th className="px-4 py-3 font-medium">Foto</th>
                   <th className="px-4 py-3 font-medium">Nome</th>
                   <th className="px-4 py-3 font-medium">Email</th>
                   <th className="px-4 py-3 font-medium">Plano</th>
@@ -68,25 +73,51 @@ export default function AdminUsersPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((u) => (
-                  <tr key={u.id} className="border-b border-border last:border-0">
-                    <td className="px-4 py-3 font-medium">{u.full_name}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{u.email}</td>
-                    <td className="px-4 py-3">{u.plan ?? "—"}</td>
+                {filtered.map((user) => (
+                  <tr
+                    key={user.id}
+                    className="border-b border-border last:border-0"
+                  >
+                    <td className="px-4 py-3 font-medium">
+                      {user.avatar_url ? (
+                        <Image
+                          src={user.avatar_url}
+                          alt={user.full_name}
+                          width={32}
+                          height={32}
+                          className="h-8 w-8 rounded-full"
+                        />
+                      ) : (
+                        <Image
+                          src={defaultAvatar}
+                          alt={user.full_name}
+                          width={32}
+                          height={32}
+                          className="h-8 w-8 rounded-full"
+                        />
+                      )}
+                    </td>
+                    <td className="px-4 py-3 font-medium">
+                      {user.full_name === "" ? "Não informado" : user.full_name}
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {user.email}
+                    </td>
+                    <td className="px-4 py-3">{user.plan ?? "Gratuito"}</td>
                     <td className="px-4 py-3">
                       <span
                         className={cn(
-                          "rounded-full px-2 py-0.5 text-xs font-medium",
-                          u.status === "ativo"
+                          "inline-block rounded-full px-2 py-0.5 text-xs font-medium first-letter:capitalize",
+                          user.status === "ativo"
                             ? "bg-primary/15 text-primary"
                             : "bg-muted text-muted-foreground",
                         )}
                       >
-                        {u.status}
+                        {user.status}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
-                      {formatDateTime(u.date_joined)}
+                      {formatDateTime(user.date_joined)}
                     </td>
                   </tr>
                 ))}
