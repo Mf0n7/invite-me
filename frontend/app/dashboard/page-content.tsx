@@ -40,17 +40,17 @@ export default function DashboardPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {events.map((ev) => (
             <Link key={ev.uuid} href={`/dashboard/events/${ev.uuid}/edit`}>
-              <Card className="h-full transition-colors hover:border-primary/50">
+              <Card className="card-hover group h-full">
                 <CardHeader>
                   <CardTitle className="text-xl">{ev.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-muted-foreground">
                   <p className="flex items-center gap-2">
-                    <CalendarDays className="size-4 text-primary" />
+                    <CalendarDays className="size-4 text-primary transition-colors duration-300 group-hover:text-[hsl(var(--celebrate))]" />
                     {formatDateTime(ev.starts_at)}
                   </p>
                   <p className="flex items-center gap-2">
-                    <MapPin className="size-4 text-primary" />
+                    <MapPin className="size-4 text-primary transition-colors duration-300 group-hover:text-[hsl(var(--celebrate))]" />
                     <span className="line-clamp-1">{ev.address}</span>
                   </p>
                 </CardContent>
