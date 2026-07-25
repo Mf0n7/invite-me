@@ -62,9 +62,9 @@ export function FeaturesSection() {
               <motion.div
                 key={feat.title}
                 variants={staggerItem}
-                className="rounded-xl border border-border bg-card/60 p-6 backdrop-blur-sm"
+                className="card-hover group rounded-xl border border-border bg-card/60 p-6 backdrop-blur-sm"
               >
-                <Icon className="mb-4 size-5 text-primary" />
+                <Icon className="mb-4 size-5 text-primary transition-colors duration-300 group-hover:text-[hsl(var(--celebrate))]" />
                 <h3 className="mb-1.5 font-semibold">{feat.title}</h3>
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {feat.description}
