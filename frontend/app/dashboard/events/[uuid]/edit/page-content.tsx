@@ -2,12 +2,13 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
-import { Gift, LinkIcon, Pencil, Trash2, Users } from "lucide-react";
+import { Gift, LinkIcon, Pencil, ShieldAlert, Trash2, Users } from "lucide-react";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { BackButton } from "@/components/shared/back-button";
+import { useLenis } from "@/context/lenis";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { EventForm } from "@/components/events/event-form";
@@ -28,12 +29,14 @@ const SECTIONS = [
   { id: "nominais", label: "Convites nominais", icon: Users },
   { id: "presentes", label: "Lista de presentes", icon: Gift },
   { id: "dados", label: "Dados do evento", icon: Pencil },
+  { id: "seguranca", label: "Segurança", icon: ShieldAlert },
 ];
 
 export default function EditEventPage() {
   const params = useParams<{ uuid: string }>();
   const uuid = params.uuid;
   const router = useRouter();
+  const lenis = useLenis();
 
   const { data: event, isLoading, isError } = useEvent(uuid);
   const updateEvent = useUpdateEvent(uuid);
@@ -90,19 +93,10 @@ export default function EditEventPage() {
         <p className="text-destructive">Evento não encontrado.</p>
       ) : (
         <>
-          <div className="mb-5 flex items-start justify-between gap-4">
+          <div className="mb-5">
             <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               {event.title}
             </h1>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setConfirmDeleteOpen(true)}
-              className="shrink-0 text-destructive"
-            >
-              <Trash2 className="size-4" />{" "}
-              <span className="hidden sm:inline">Excluir</span>
-            </Button>
           </div>
 
           <ConfirmDialog
@@ -119,6 +113,10 @@ export default function EditEventPage() {
               <a
                 key={id}
                 href={`#${id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  lenis?.scrollTo(`#${id}`, { offset: -140 });
+                }}
                 className="flex items-center justify-center gap-1.5 rounded-xl border border-border px-2.5 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground sm:shrink-0 sm:justify-start sm:rounded-full sm:border-none sm:px-3 sm:py-1.5"
               >
                 <Icon className="size-4 shrink-0" /> {label}
@@ -142,6 +140,26 @@ export default function EditEventPage() {
                 onSubmit={handleSubmit}
                 submitLabel="Salvar alterações"
               />
+            </section>
+
+            <section id="seguranca" className="scroll-mt-40">
+              <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-5">
+                <h2 className="mb-1 flex items-center gap-2 font-semibold text-destructive">
+                  <ShieldAlert className="size-4.5" /> Área de segurança
+                </h2>
+                <p className="mb-4 text-sm text-muted-foreground">
+                  Excluir o evento remove convites, confirmações e lista de
+                  presentes associados. Essa ação não pode ser desfeita.
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setConfirmDeleteOpen(true)}
+                  className="border-destructive/40 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                >
+                  <Trash2 className="size-4" /> Excluir evento
+                </Button>
+              </div>
             </section>
           </div>
         </>
