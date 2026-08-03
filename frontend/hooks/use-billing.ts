@@ -9,7 +9,8 @@ import type { SubscriptionInfo, TiersResponse } from "@/lib/types";
 export function useTiers() {
   return useQuery({
     queryKey: ["billing-tiers"],
-    queryFn: () => apiFetch<TiersResponse>("/billing/tiers/", { anonymous: true }),
+    queryFn: ({ signal }) =>
+      apiFetch<TiersResponse>("/billing/tiers/", { anonymous: true, signal }),
     staleTime: Infinity,
   });
 }
@@ -17,7 +18,7 @@ export function useTiers() {
 export function useSubscription() {
   return useQuery({
     queryKey: ["billing-subscription"],
-    queryFn: () => apiFetch<SubscriptionInfo>("/billing/subscription/"),
+    queryFn: ({ signal }) => apiFetch<SubscriptionInfo>("/billing/subscription/", { signal }),
   });
 }
 

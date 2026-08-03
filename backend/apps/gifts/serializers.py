@@ -1,10 +1,21 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
+
+from apps.common.validators import validate_safe_url
 
 from .models import GiftItem
 
 
 class GiftItemSerializer(serializers.ModelSerializer):
     """Item como o dono vê/edita (inclui quem reservou)."""
+
+    def validate_url(self, value):
+        # O link é renderizado como <a href> na página pública do convite:
+        # só http/https, para não virar `javascript:`/`data:`.
+        try:
+            return validate_safe_url(value)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(exc.messages) from exc
 
     class Meta:
         model = GiftItem

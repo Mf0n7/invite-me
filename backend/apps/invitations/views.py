@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, parsers, status
@@ -5,6 +6,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.common.throttling import ScopedSustainedThrottle, ScopedThrottle
+from apps.common.validators import validate_spreadsheet_upload
 from apps.events.models import Event
 from apps.rsvps.models import Rsvp
 
@@ -55,12 +58,19 @@ class InvitationImportView(APIView):
 
     permission_classes = [IsAuthenticated]
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
+    # Parse de planilha é a operação mais cara da API por requisição: teto próprio.
+    throttle_classes = [ScopedThrottle]
+    throttle_scope = "upload"
 
     def post(self, request, uuid):
         event = get_object_or_404(Event, uuid=uuid, owner=request.user)
         uploaded = request.FILES.get("file")
         if not uploaded:
             return Response({"detail": "Envie um arquivo no campo 'file'."}, status=400)
+        try:
+            validate_spreadsheet_upload(uploaded)
+        except DjangoValidationError as exc:
+            return Response({"detail": exc.messages[0]}, status=400)
         try:
             names = parse_guest_names(uploaded)
         except ImportError_ as exc:
@@ -81,6 +91,9 @@ class PublicNominalView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
     serializer_class = PublicInvitationSerializer
+    throttle_classes = [ScopedThrottle, ScopedSustainedThrottle]
+    throttle_scope = "public_read"
+    throttle_scope_sustained = "public_read_sustained"
 
     def get(self, request, token):
         invitation = get_object_or_404(Invitation, token=token)
@@ -96,6 +109,9 @@ class NominalConfirmView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
     serializer_class = NominalConfirmSerializer
+    throttle_classes = [ScopedThrottle, ScopedSustainedThrottle]
+    throttle_scope = "public_write"
+    throttle_scope_sustained = "public_write_sustained"
 
     def post(self, request, token):
         invitation = get_object_or_404(Invitation, token=token)

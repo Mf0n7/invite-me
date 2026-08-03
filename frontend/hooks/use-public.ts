@@ -14,7 +14,8 @@ export type PublicNominal = {
 export function usePublicEvent(token: string) {
   return useQuery({
     queryKey: ["public-event", token],
-    queryFn: () => apiFetch<PublicEvent>(`/invite/${token}/`, { anonymous: true }),
+    queryFn: ({ signal }) =>
+      apiFetch<PublicEvent>(`/invite/${token}/`, { anonymous: true, signal }),
     enabled: !!token,
     retry: false,
   });
@@ -36,7 +37,8 @@ export function useConfirmRsvp(token: string) {
 export function usePublicNominal(token: string) {
   return useQuery({
     queryKey: ["public-nominal", token],
-    queryFn: () => apiFetch<PublicNominal>(`/nominal/${token}/`, { anonymous: true }),
+    queryFn: ({ signal }) =>
+      apiFetch<PublicNominal>(`/nominal/${token}/`, { anonymous: true, signal }),
     enabled: !!token,
     retry: false,
   });

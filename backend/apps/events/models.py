@@ -5,11 +5,16 @@ from django.core.files.uploadedfile import UploadedFile
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .images import compress_event_photo
+from .images import process_event_photo
 
 
 def event_photo_path(instance, filename):
-    return f"events/{instance.uuid}/{filename}"
+    """Nome de arquivo gerado por nós — o nome enviado pelo usuário é descartado.
+
+    Elimina de uma vez: path traversal (`../../`), extensão dupla
+    (`foto.jpg.php`), caracteres de controle e colisão entre uploads.
+    """
+    return f"events/{instance.uuid}/{uuid.uuid4().hex}.jpg"
 
 
 class Event(models.Model):
@@ -50,12 +55,12 @@ class Event(models.Model):
         # Coerência: sem acompanhantes => limite zero.
         if not self.allow_companions:
             self.max_companions = 0
-        # Comprime só quando há upload novo (arquivo em memória/temp).
+        # Valida e re-encoda só quando há upload novo (arquivo em memória/temp).
+        # process_event_photo levanta ValidationError se o arquivo não for uma
+        # imagem legítima — nada não processado chega ao disco.
         if self.photo and isinstance(getattr(self.photo, "file", None), UploadedFile):
-            compressed = compress_event_photo(self.photo)
-            if compressed:
-                name, content = compressed
-                self.photo.save(name, content, save=False)
+            name, content = process_event_photo(self.photo)
+            self.photo.save(name, content, save=False)
         super().save(*args, **kwargs)
 
     # ---- Link público de convite ----
