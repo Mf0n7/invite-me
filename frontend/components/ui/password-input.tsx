@@ -26,7 +26,6 @@ const PasswordInput = React.forwardRef<
       />
       <button
         type="button"
-        tabIndex={-1}
         onClick={() => setShow((v) => !v)}
         className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
         aria-label={show ? "Ocultar senha" : "Mostrar senha"}
