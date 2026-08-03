@@ -32,6 +32,11 @@ function parseStartsAt(val: string): { date: Date | undefined; time: string } {
   };
 }
 
+// Espelha apps/common/validators.py no backend. A validação que vale é a do
+// servidor; esta aqui só evita subir 20 MB para receber 400 depois.
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+const ACCEPTED_PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+
 export function EventForm({
   event,
   onSubmit,
@@ -42,8 +47,29 @@ export function EventForm({
   submitLabel: string;
 }) {
   const [photo, setPhoto] = useState<File | null>(null);
+  const [photoError, setPhotoError] = useState<string | undefined>();
   const [preview, setPreview] = useState<string | null>(event?.photo ?? null);
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  function handlePhotoChange(file: File | null) {
+    if (!file) {
+      setPhoto(null);
+      setPhotoError(undefined);
+      return;
+    }
+    if (!ACCEPTED_PHOTO_TYPES.includes(file.type)) {
+      setPhoto(null);
+      setPhotoError("Formato não suportado. Envie JPG, PNG, WEBP ou GIF.");
+      return;
+    }
+    if (file.size > MAX_PHOTO_BYTES) {
+      setPhoto(null);
+      setPhotoError("Imagem muito grande. O limite é 5 MB.");
+      return;
+    }
+    setPhotoError(undefined);
+    setPhoto(file);
+  }
 
   useEffect(() => {
     if (!photo) {
@@ -133,7 +159,7 @@ export function EventForm({
         />
       </Field>
 
-      <Field label="Foto" error={undefined}>
+      <Field label="Foto" error={photoError}>
         <div className="flex items-center gap-4">
           {preview && (
             <Image
@@ -148,8 +174,8 @@ export function EventForm({
           <div className="flex-1 space-y-1">
             <Input
               type="file"
-              accept="image/*"
-              onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
+              accept={ACCEPTED_PHOTO_TYPES.join(",")}
+              onChange={(e) => handlePhotoChange(e.target.files?.[0] ?? null)}
             />
             {event?.photo && !photo && (
               <p className="text-xs text-muted-foreground">

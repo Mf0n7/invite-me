@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const userQuery = useQuery({
     queryKey: USER_KEY,
-    queryFn: () => apiFetch<User>("/auth/user/"),
+    queryFn: ({ signal }) => apiFetch<User>("/auth/user/", { signal }),
     enabled: !!token,
     retry: false,
     staleTime: 5 * 60_000,

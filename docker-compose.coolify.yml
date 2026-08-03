@@ -31,6 +31,20 @@ services:
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       REDIS_URL: redis://redis:6379/0
+      # Banco 1 do mesmo Redis: cache do rate limit (o 0 é o broker do Celery).
+      REDIS_CACHE_URL: redis://redis:6379/1
+      # Nº de proxies reversos confiáveis à frente (Traefik do Coolify = 1).
+      # Se colocar Cloudflare/WAF na frente, suba para 2 — senão o rate limit
+      # passa a contar o IP do proxy e não o do cliente.
+      TRUSTED_PROXY_COUNT: ${TRUSTED_PROXY_COUNT:-1}
+      # Tetos do rate limit (opcionais — ver config/settings/base.py: RATE_LIMIT).
+      RATE_LIMIT_ENABLED: ${RATE_LIMIT_ENABLED:-true}
+      RATE_LIMIT_BURST: ${RATE_LIMIT_BURST:-60}
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-300}
+      RATE_LIMIT_PER_HOUR: ${RATE_LIMIT_PER_HOUR:-4000}
+      RATE_LIMIT_MAX_CONCURRENT: ${RATE_LIMIT_MAX_CONCURRENT:-15}
+      # Swagger/Redoc: restrito a staff por padrão em produção.
+      API_DOCS_PUBLIC: ${API_DOCS_PUBLIC:-false}
       FRONTEND_URL: ${FRONTEND_URL}
       CORS_ALLOWED_ORIGINS: ${FRONTEND_URL}
       CSRF_TRUSTED_ORIGINS: ${FRONTEND_URL}

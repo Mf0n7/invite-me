@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.billing.entitlements import name_capacity_for_event
+from apps.common.throttling import ScopedSustainedThrottle, ScopedThrottle
 from apps.events.models import Event, EventLink
 
 from .serializers import (
@@ -90,6 +91,11 @@ class PublicEventView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
     serializer_class = PublicEventSerializer
+    # Rota anônima: teto de leitura por IP (120/min, 1200/h). Folgado para um
+    # convidado abrindo o convite, apertado para varredura de tokens.
+    throttle_classes = [ScopedThrottle, ScopedSustainedThrottle]
+    throttle_scope = "public_read"
+    throttle_scope_sustained = "public_read_sustained"
 
     def get(self, request, token):
         link = get_object_or_404(EventLink, token=token, is_active=True)
@@ -103,6 +109,11 @@ class ConfirmView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
     serializer_class = ConfirmSerializer
+    # Escrita anônima: 12/min e 60/h por IP — impede inflar a lista de
+    # confirmados de um evento com milhares de nomes falsos.
+    throttle_classes = [ScopedThrottle, ScopedSustainedThrottle]
+    throttle_scope = "public_write"
+    throttle_scope_sustained = "public_write_sustained"
 
     def post(self, request, token):
         link = get_object_or_404(EventLink, token=token, is_active=True)

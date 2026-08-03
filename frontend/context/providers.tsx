@@ -7,6 +7,17 @@ import { Toaster } from "sonner";
 
 import { AuthProvider } from "@/context/auth";
 import { LenisProvider } from "@/context/lenis";
+import { ApiError } from "@/lib/api";
+
+/**
+ * Nunca insistir em erro do cliente (4xx) — e muito menos em 429: repetir uma
+ * requisição barrada pelo rate limit só empurra o IP mais fundo no bloqueio.
+ * Erro de rede/5xx segue com 1 retentativa.
+ */
+function retryPolicy(failureCount: number, error: unknown) {
+  if (error instanceof ApiError && error.status >= 400 && error.status < 500) return false;
+  return failureCount < 1;
+}
 
 function ThemedToaster() {
   const { resolvedTheme } = useTheme();
@@ -24,7 +35,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
     () =>
       new QueryClient({
         defaultOptions: {
-          queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: false },
+          queries: { staleTime: 30_000, retry: retryPolicy, refetchOnWindowFocus: false },
+          mutations: { retry: false },
         },
       }),
   );

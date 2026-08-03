@@ -33,11 +33,35 @@
       "Bash(rm -f db.sqlite3 _t_lista.csv _t_lista.xlsx)",
       "Bash(.venv/Scripts/python.exe manage.py makemigrations billing)",
       "Bash(:)",
-      "Bash(rm -f \"c:/Users/Matheus Fontenele/.claude/projects/c--Users-Matheus-Fontenele-Documents-projetos-o-penetra/memory/decisoes-fase-5-gating.md\" && echo \"removido\")",
-      "Bash(.venv/Scripts/python.exe manage.py makemigrations billing gifts)"
+      "Bash(rm -f \"c:/Users/Matheus Fontenele/.claude/projects/c--Users-Matheus-Fontenele-Documents-projetos-CONVIDA/memory/decisoes-fase-5-gating.md\" && echo \"removido\")",
+      "Bash(.venv/Scripts/python.exe manage.py makemigrations billing gifts)",
+      "Bash(.venv/Scripts/python.exe manage.py spectacular --file /tmp/s2.yml)",
+      "Bash(git pull *)",
+      "Bash(git push *)",
+      "Bash(grep -nA3 \"MEDIA_URL\\\\|static\\(\" config/urls.py)",
+      "Bash(.venv/Scripts/python.exe -c \"import os;os.environ.setdefault\\('DJANGO_SETTINGS_MODULE','config.settings.dev'\\);import django;django.setup\\(\\);from django.conf import settings;print\\('MEDIA_ROOT=',settings.MEDIA_ROOT\\)\")",
+      "Bash(DJANGO_SETTINGS_MODULE=config.settings.dev .venv/Scripts/python.exe manage.py check)",
+      "Bash(DJANGO_SETTINGS_MODULE=config.settings.prod DJANGO_SECRET_KEY=x DJANGO_ALLOWED_HOSTS=example.com REDIS_URL=redis://redis:6379/0 .venv/Scripts/python.exe manage.py check --deploy)",
+      "Bash(.venv/Scripts/python.exe \"C:/Users/MATHEU~1/AppData/Local/Temp/claude/c--Users-Matheus-Fontenele-Documents-projetos-CONVIDA/261c646b-362f-4b85-8743-a77243d7de09/scratchpad/smoke.py\")",
+      "Bash(PYTHONPATH=\"c:/Users/Matheus Fontenele/Documents/projetos/CONVIDA/backend\" .venv/Scripts/python.exe \"C:/Users/MATHEU~1/AppData/Local/Temp/claude/c--Users-Matheus-Fontenele-Documents-projetos-CONVIDA/261c646b-362f-4b85-8743-a77243d7de09/scratchpad/smoke.py\")",
+      "Bash(PYTHONPATH=\"c:/Users/Matheus Fontenele/Documents/projetos/CONVIDA/backend\" .venv/Scripts/python.exe \"C:/Users/MATHEU~1/AppData/Local/Temp/claude/c--Users-Matheus-Fontenele-Documents-projetos-CONVIDA/261c646b-362f-4b85-8743-a77243d7de09/scratchpad/smoke2.py\")",
+      "Bash(sed -i 's/HTTP_X_FORWARDED_FOR=\"1.1.1.1, 198.51.100.7\"\\)/HTTP_X_FORWARDED_FOR=\"1.1.1.1, 198.51.100.7\", HTTP_HOST=\"localhost\"\\)/; s/HTTP_X_FORWARDED_FOR=\"1.1.1.1, 198.51.100.99\"\\)/HTTP_X_FORWARDED_FOR=\"1.1.1.1, 198.51.100.99\", HTTP_HOST=\"localhost\"\\)/' \"C:/Users/MATHEU~1/AppData/Local/Temp/claude/c--Users-Matheus-Fontenele-Documents-projetos-CONVIDA/261c646b-362f-4b85-8743-a77243d7de09/scratchpad/smoke2.py\")",
+      "Bash(.venv/Scripts/python.exe -m ruff check apps config)",
+      "Bash(.venv/Scripts/python.exe -m ruff check apps config --output-format=concise)",
+      "Bash(.venv/Scripts/python.exe -m ruff check apps/common/ratelimit.py apps/common/middleware.py apps/common/throttling.py apps/common/validators.py apps/common/media.py apps/events/images.py apps/invitations/imports.py apps/accounts/views.py apps/accounts/urls.py config/urls.py config/settings/prod.py --output-format=concise)",
+      "Bash(.venv/Scripts/python.exe -m ruff check apps/events/models.py apps/events/views.py apps/events/serializers.py apps/rsvps/views.py apps/gifts/views.py apps/gifts/serializers.py apps/invitations/views.py apps/billing/views.py --output-format=concise)",
+      "Bash(.venv/Scripts/python.exe -m pytest --version)",
+      "Bash(.venv/Scripts/python.exe -c \"import pytest_django; print\\('pytest-django ok'\\)\")",
+      "Bash(PYTHONPATH=\"c:/Users/Matheus Fontenele/Documents/projetos/CONVIDA/backend\" .venv/Scripts/python.exe -m pytest apps/common/test_security.py -q)",
+      "Bash(sed -i 's/reverse\\(\"api:v1:/reverse\\(\"v1:/g' apps/common/test_security.py)",
+      "Bash(PYTHONPATH=\"c:/Users/Matheus Fontenele/Documents/projetos/CONVIDA/backend\" .venv/Scripts/python.exe \"C:/Users/MATHEU~1/AppData/Local/Temp/claude/c--Users-Matheus-Fontenele-Documents-projetos-CONVIDA/261c646b-362f-4b85-8743-a77243d7de09/scratchpad/smoke3.py\")",
+      "Bash(.venv/Scripts/python.exe -m ruff check apps/common/test_security.py apps/accounts/urls.py --output-format=concise)",
+      "Bash(.venv/Scripts/python.exe -m ruff check apps/common/ config/ --output-format=concise)",
+      "Bash(.venv/Scripts/python.exe -m ruff check apps/common/ --output-format=concise)",
+      "Bash(git check-ignore *)"
     ],
     "additionalDirectories": [
-      "c:\\Users\\Matheus Fontenele\\.claude\\projects\\c--Users-Matheus-Fontenele-Documents-projetos-o-penetra\\memory"
+      "c:\\Users\\Matheus Fontenele\\.claude\\projects\\c--Users-Matheus-Fontenele-Documents-projetos-CONVIDA\\memory"
     ]
   }
 }
