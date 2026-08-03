@@ -1,6 +1,7 @@
 import stripe
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -27,6 +28,7 @@ from .services import (
 from .webhooks import handle_event
 
 
+@extend_schema(tags=["Pagamentos & Assinatura"])
 class TiersView(APIView):
     """Faixas e preços disponíveis (avulso e assinatura)."""
 
@@ -60,6 +62,7 @@ def _require_stripe():
     return None
 
 
+@extend_schema(tags=["Pagamentos & Assinatura"])
 class EventCheckoutView(APIView):
     """Checkout avulso de uma faixa para um evento."""
 
@@ -82,6 +85,7 @@ class EventCheckoutView(APIView):
         return Response({"checkout_url": url})
 
 
+@extend_schema(tags=["Pagamentos & Assinatura"])
 class GiftCheckoutView(APIView):
     """Checkout do addon de lista de presentes (avulso por evento)."""
 
@@ -104,6 +108,7 @@ class GiftCheckoutView(APIView):
         return Response({"checkout_url": url})
 
 
+@extend_schema(tags=["Pagamentos & Assinatura"])
 class SubscriptionCheckoutView(APIView):
     """Checkout de assinatura recorrente por faixa."""
 
@@ -126,6 +131,7 @@ class SubscriptionCheckoutView(APIView):
         return Response({"checkout_url": url})
 
 
+@extend_schema(tags=["Pagamentos & Assinatura"])
 class SubscriptionView(APIView):
     """Status da assinatura do usuário atual."""
 
@@ -139,6 +145,7 @@ class SubscriptionView(APIView):
         return Response(SubscriptionSerializer(sub).data)
 
 
+@extend_schema(tags=["Pagamentos & Assinatura"])
 class PortalView(APIView):
     """Link do portal de gerenciamento (cancelar/atualizar) do Stripe."""
 
@@ -157,6 +164,7 @@ class PortalView(APIView):
         return Response({"portal_url": url})
 
 
+@extend_schema(tags=["Pagamentos & Assinatura"])
 class WebhookView(APIView):
     """Recebe eventos do Stripe (valida assinatura)."""
 

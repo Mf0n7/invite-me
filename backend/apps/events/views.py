@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import parsers, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -11,6 +12,7 @@ from .models import Event
 from .serializers import EventLinkSerializer, EventSerializer
 
 
+@extend_schema(tags=["Eventos"])
 class EventViewSet(viewsets.ModelViewSet):
     """CRUD de eventos. Cada usuário só enxerga e gerencia os próprios."""
 
@@ -29,6 +31,7 @@ class EventViewSet(viewsets.ModelViewSet):
         send_event_created_email(event)
 
 
+@extend_schema(tags=["Eventos"])
 class EventLinkView(APIView):
     """Link público de convite do evento. GET retorna/garante o ativo; POST regenera."""
 
