@@ -133,22 +133,13 @@ export default function ProfilePage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              <div className="flex items-center gap-4">
-                <Avatar className="size-16">
+              <div className="flex items-center justify-center gap-4">
+                <Avatar className="size-28">
                   <AvatarImage src={user?.avatar_url || undefined} />
-                  <AvatarFallback className="text-lg">
+                  <AvatarFallback className="text-4xl font-bold">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex-1 space-y-1.5">
-                  <Label htmlFor="avatar_url">URL do avatar</Label>
-                  <Input
-                    id="avatar_url"
-                    placeholder="https://…"
-                    {...register("avatar_url")}
-                  />
-                  <FieldError message={errors.avatar_url?.message} />
-                </div>
               </div>
 
               <div className="space-y-1.5">

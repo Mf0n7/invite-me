@@ -10,8 +10,10 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { GiftSection } from "@/components/invite/gift-section";
+import { Badge } from "@/components/ui/badge";
 import { Centered } from "@/components/shared/centered";
 import { FieldError } from "@/components/shared/field-error";
+import { PoweredBy } from "@/components/shared/powered-by";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -20,9 +22,20 @@ import { apiErrorMessage } from "@/lib/api";
 import { useConfirmNominal, usePublicNominal } from "@/hooks/use-public";
 import { formatDateTime } from "@/lib/utils";
 
+const nameRegex = /^[\p{L}\s'-]+$/u;
 const schema = z.object({
   companions: z.array(
-    z.object({ name: z.string().trim().min(1, "Informe o nome").max(120) }),
+    z.object({
+      name: z
+        .string()
+        .trim()
+        .min(5, "O nome deve ter ao menos 5 caracteres")
+        .max(120)
+        .regex(
+          nameRegex,
+          "O nome não pode conter caracteres especiais ou números",
+        ),
+    }),
   ),
 });
 type Values = z.infer<typeof schema>;
@@ -77,10 +90,13 @@ export default function NominalInvitePage() {
 
   const { event, guest_name } = data;
   const alreadyConfirmed = data.status === "confirmed" && !done;
+  const eventHasPassed = new Date(event.starts_at) < new Date();
 
   return (
     <main className="container flex min-h-screen flex-col items-center justify-center py-12">
-      <Card className="w-full max-w-lg overflow-hidden">
+      <Card
+        className={`w-full max-w-lg overflow-hidden ${eventHasPassed ? "opacity-70" : ""}`}
+      >
         {event.photo && (
           <div className="relative h-48 w-full">
             <Image
@@ -106,6 +122,11 @@ export default function NominalInvitePage() {
             <p className="flex items-center gap-2">
               <CalendarDays className="size-4 text-primary" />
               {formatDateTime(event.starts_at)}
+              {eventHasPassed && (
+                <Badge variant="destructive" className="ml-1">
+                  Evento encerrado
+                </Badge>
+              )}
             </p>
             <p className="flex items-center gap-2">
               <MapPin className="size-4 text-primary" />
@@ -142,6 +163,10 @@ export default function NominalInvitePage() {
                   : "Este convite já foi usado."}
               </p>
             </div>
+          ) : eventHasPassed ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              Este evento já aconteceu e não aceita mais confirmações.
+            </p>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <p className="text-sm text-muted-foreground">
@@ -205,9 +230,7 @@ export default function NominalInvitePage() {
           <GiftSection token={token} />
         </CardContent>
       </Card>
-      <p className="mt-6 text-xs text-muted-foreground/70">
-        Powered by <span className="font-semibold text-primary">Convida</span>
-      </p>
+      <PoweredBy />
     </main>
   );
 }
