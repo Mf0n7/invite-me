@@ -24,5 +24,4 @@ export const profileSchema = z.object({
   display_name: z.string().max(150).optional(),
   avatar_url: z.string().url("URL inválida").optional().or(z.literal("")),
 });
-
 export type ProfileValues = z.infer<typeof profileSchema>;

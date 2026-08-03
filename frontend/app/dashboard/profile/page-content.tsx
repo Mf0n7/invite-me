@@ -37,10 +37,7 @@ import {
   useUpdateProfile,
 } from "@/hooks/use-account";
 import { apiErrorMessage } from "@/lib/api";
-import {
-  profileSchema,
-  type ProfileValues,
-} from "@/features/auth/schemas/auth.schema";
+import { profileSchema, type ProfileValues } from "@/lib/schemas";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();

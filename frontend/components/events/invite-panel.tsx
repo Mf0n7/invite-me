@@ -82,7 +82,14 @@ export function InvitePanel({ uuid }: { uuid: string }) {
               value={isLoading ? "Carregando…" : (link?.public_url ?? "")}
               className="font-mono text-xs"
             />
-            <Button type="button" variant="outline" size="icon" onClick={copy} disabled={!link}>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={copy}
+              disabled={!link}
+              aria-label={copied ? "Link copiado" : "Copiar link"}
+            >
               {copied ? <Check className="text-primary" /> : <Copy />}
             </Button>
           </div>
