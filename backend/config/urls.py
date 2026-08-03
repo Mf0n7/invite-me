@@ -1,18 +1,13 @@
-from django.conf import settings
 from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import include, path, re_path
-from django.views.static import serve
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
+
+from apps.common.media import serve_media
 
 
 def healthcheck(_request):
@@ -20,15 +15,13 @@ def healthcheck(_request):
 
 
 api_v1 = [
-    # Auth — JWT
-    path("auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("auth/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
-    # Auth — dj-rest-auth (login/logout/registro/usuário) + social (Google)
+    # Auth — nossas views com throttle vêm PRIMEIRO e sobrescrevem as rotas
+    # homônimas do dj-rest-auth/simplejwt incluídas logo abaixo.
+    path("auth/", include("apps.accounts.urls")),
+    # Auth — dj-rest-auth (logout, /user/, verificação de e-mail…)
     path("auth/", include("dj_rest_auth.urls")),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
-    path("auth/", include("apps.accounts.urls")),
-    # Domínio (preenchido nas próximas fases)
+    # Domínio
     path("", include("apps.events.urls")),
     path("", include("apps.invitations.urls")),
     path("", include("apps.rsvps.urls")),
@@ -42,14 +35,15 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),  # callbacks OAuth do allauth
     path("api/v1/", include((api_v1, "api"), namespace="v1")),
-    # Documentação da API
+    # Documentação da API. As permissões vêm de SPECTACULAR_SETTINGS
+    # ("SERVE_PERMISSIONS") — em produção, staff apenas.
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]
 
-# Serve os uploads de mídia (fotos de evento). Em produção o Django serve por
-# aqui; os arquivos ficam num volume persistente montado em MEDIA_ROOT.
+# Uploads de mídia (fotos de evento). Servidos por um wrapper que só entrega
+# extensões de imagem e força o Content-Type — ver apps/common/media.py.
 urlpatterns += [
-    re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
+    re_path(r"^media/(?P<path>.*)$", serve_media, name="media"),
 ]

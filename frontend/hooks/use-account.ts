@@ -18,8 +18,9 @@ export function useUpdateProfile() {
 
 export function useDeleteAccount() {
   return useMutation({
-    mutationFn: () =>
-      apiFetch<void>("/auth/user/", { method: "DELETE" }),
+    // /auth/user/ é a UserDetailsView do dj-rest-auth (RetrieveUpdate, sem
+    // DELETE → 405). A exclusão de conta tem rota própria: DeleteAccountView.
+    mutationFn: () => apiFetch<void>("/auth/user/delete/", { method: "DELETE" }),
   });
 }
 

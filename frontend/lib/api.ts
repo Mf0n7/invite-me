@@ -33,15 +33,33 @@ export const tokenStore = {
 export class ApiError extends Error {
   status: number;
   data: unknown;
-  constructor(status: number, data: unknown) {
+  /** Segundos até poder tentar de novo (header Retry-After), em respostas 429. */
+  retryAfter: number | null;
+  constructor(status: number, data: unknown, retryAfter: number | null = null) {
     super(`API ${status}`);
     this.status = status;
     this.data = data;
+    this.retryAfter = retryAfter;
   }
+  get isThrottled() {
+    return this.status === 429;
+  }
+}
+
+function throttleMessage(err: ApiError): string {
+  const seconds = err.retryAfter;
+  if (seconds && seconds > 0) {
+    const minutes = Math.ceil(seconds / 60);
+    const wait = seconds < 60 ? `${seconds} segundo(s)` : `${minutes} minuto(s)`;
+    return `Muitas tentativas. Aguarde ${wait} e tente novamente.`;
+  }
+  return "Muitas tentativas em pouco tempo. Aguarde um instante e tente novamente.";
 }
 
 /** Extrai uma mensagem legível de um erro da API (DRF devolve dict de campos ou {detail}). */
 export function apiErrorMessage(err: unknown, fallback = "Algo deu errado. Tente novamente."): string {
+  // 429 vem do rate limit (DRF em inglês, middleware em pt-BR): normalizamos.
+  if (err instanceof ApiError && err.isThrottled) return throttleMessage(err);
   if (err instanceof ApiError && err.data && typeof err.data === "object") {
     const data = err.data as Record<string, unknown>;
     if (typeof data.detail === "string") return data.detail;
@@ -58,6 +76,13 @@ type RequestOptions = Omit<RequestInit, "body"> & {
   token?: string | null;
   /** Rota pública (não envia/renova token) */
   anonymous?: boolean;
+  /**
+   * AbortSignal. Os hooks repassam o signal que o TanStack Query fornece, então
+   * ao trocar de página as requisições ainda em voo são canceladas de fato
+   * (`fetch` aborta a conexão) em vez de continuarem ocupando um worker do
+   * backend só para ter a resposta descartada.
+   */
+  signal?: AbortSignal;
 };
 
 async function refreshAccessToken(): Promise<string | null> {
@@ -114,7 +139,8 @@ export async function apiFetch<T = unknown>(
     } catch {
       /* corpo vazio */
     }
-    throw new ApiError(res.status, data);
+    const retryAfter = Number(res.headers.get("Retry-After"));
+    throw new ApiError(res.status, data, Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : null);
   }
 
   if (res.status === 204) return undefined as T;

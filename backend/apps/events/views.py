@@ -1,6 +1,7 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
-from rest_framework import parsers, status, viewsets
+from rest_framework import parsers, serializers, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -27,8 +28,19 @@ class EventViewSet(viewsets.ModelViewSet):
         return Event.objects.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
-        event = serializer.save(owner=self.request.user)
+        event = self._save(serializer, owner=self.request.user)
         send_event_created_email(event)
+
+    def perform_update(self, serializer):
+        self._save(serializer)
+
+    @staticmethod
+    def _save(serializer, **kwargs):
+        """Converte erro de validação do model (foto rejeitada) em 400, não 500."""
+        try:
+            return serializer.save(**kwargs)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError({"photo": exc.messages}) from exc
 
 
 @extend_schema(tags=["Eventos"])

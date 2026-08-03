@@ -10,7 +10,8 @@ const key = (uuid: string) => ["events", uuid, "invitations"];
 export function useInvitations(uuid: string) {
   return useQuery({
     queryKey: key(uuid),
-    queryFn: () => apiFetch<Paginated<Invitation>>(`/events/${uuid}/invitations/`),
+    queryFn: ({ signal }) =>
+      apiFetch<Paginated<Invitation>>(`/events/${uuid}/invitations/`, { signal }),
     enabled: !!uuid,
   });
 }

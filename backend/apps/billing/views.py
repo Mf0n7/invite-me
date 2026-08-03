@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.common.throttling import ScopedThrottle
 from apps.events.models import Event
 
 from .constants import (
@@ -33,6 +34,8 @@ class TiersView(APIView):
     """Faixas e preços disponíveis (avulso e assinatura)."""
 
     permission_classes = [AllowAny]
+    throttle_classes = [ScopedThrottle]
+    throttle_scope = "public_read"
 
     def get(self, request):
         tiers = [
@@ -62,16 +65,26 @@ def _require_stripe():
     return None
 
 
+def _capacity_from(request) -> int:
+    """Lê `capacity` do corpo sem estourar 500 quando vem lixo ("abc", lista, null)."""
+    try:
+        return int(request.data.get("capacity") or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
 @extend_schema(tags=["Pagamentos & Assinatura"])
 class EventCheckoutView(APIView):
     """Checkout avulso de uma faixa para um evento."""
 
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedThrottle]
+    throttle_scope = "checkout"
 
     def post(self, request, uuid):
         if (resp := _require_stripe()) is not None:
             return resp
-        capacity = int(request.data.get("capacity", 0) or 0)
+        capacity = _capacity_from(request)
         if capacity not in PAID_TIERS:
             return Response({"detail": "Faixa inválida."}, status=400)
         event = get_object_or_404(Event, uuid=uuid, owner=request.user)
@@ -90,6 +103,8 @@ class GiftCheckoutView(APIView):
     """Checkout do addon de lista de presentes (avulso por evento)."""
 
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedThrottle]
+    throttle_scope = "checkout"
 
     def post(self, request, uuid):
         if (resp := _require_stripe()) is not None:
@@ -113,11 +128,13 @@ class SubscriptionCheckoutView(APIView):
     """Checkout de assinatura recorrente por faixa."""
 
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedThrottle]
+    throttle_scope = "checkout"
 
     def post(self, request):
         if (resp := _require_stripe()) is not None:
             return resp
-        capacity = int(request.data.get("capacity", 0) or 0)
+        capacity = _capacity_from(request)
         plan = SubscriptionPlan.objects.filter(capacity=capacity, active=True).first()
         if not plan or not plan.stripe_price_id:
             return Response(
@@ -150,6 +167,8 @@ class PortalView(APIView):
     """Link do portal de gerenciamento (cancelar/atualizar) do Stripe."""
 
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedThrottle]
+    throttle_scope = "checkout"
 
     def post(self, request):
         if (resp := _require_stripe()) is not None:
@@ -170,8 +189,15 @@ class WebhookView(APIView):
 
     permission_classes = [AllowAny]
     authentication_classes = []
+    # Sem throttle: a autenticação é a assinatura HMAC do Stripe e as
+    # retentativas legítimas chegam em rajada. A rota também está na lista de
+    # isenção do middleware (settings.RATE_LIMIT["EXEMPT_PREFIXES"]).
+    throttle_classes = []
 
     def post(self, request):
+        if not settings.STRIPE_WEBHOOK_SECRET:
+            # Sem segredo configurado, construct_event aceitaria qualquer coisa.
+            return Response(status=503)
         payload = request.body
         sig = request.META.get("HTTP_STRIPE_SIGNATURE", "")
         try:

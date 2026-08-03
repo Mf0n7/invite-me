@@ -12,7 +12,7 @@ export type GiftInput = { title: string; description?: string; url?: string };
 export function useGifts(uuid: string) {
   return useQuery({
     queryKey: key(uuid),
-    queryFn: () => apiFetch<GiftListResponse>(`/events/${uuid}/gifts/`),
+    queryFn: ({ signal }) => apiFetch<GiftListResponse>(`/events/${uuid}/gifts/`, { signal }),
     enabled: !!uuid,
   });
 }
@@ -58,7 +58,8 @@ export function useGiftCheckout(uuid: string) {
 export function usePublicGifts(token: string) {
   return useQuery({
     queryKey: ["public-gifts", token],
-    queryFn: () => apiFetch<PublicGift[]>(`/public/${token}/gifts/`, { anonymous: true }),
+    queryFn: ({ signal }) =>
+      apiFetch<PublicGift[]>(`/public/${token}/gifts/`, { anonymous: true, signal }),
     enabled: !!token,
   });
 }

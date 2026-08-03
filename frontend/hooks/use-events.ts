@@ -33,14 +33,14 @@ function buildBody(input: EventInput): unknown {
 export function useEvents() {
   return useQuery({
     queryKey: [KEY],
-    queryFn: () => apiFetch<Paginated<EventItem>>("/events/"),
+    queryFn: ({ signal }) => apiFetch<Paginated<EventItem>>("/events/", { signal }),
   });
 }
 
 export function useEvent(uuid: string | undefined) {
   return useQuery({
     queryKey: [KEY, uuid],
-    queryFn: () => apiFetch<EventItem>(`/events/${uuid}/`),
+    queryFn: ({ signal }) => apiFetch<EventItem>(`/events/${uuid}/`, { signal }),
     enabled: !!uuid,
   });
 }
@@ -77,7 +77,7 @@ export function useDeleteEvent() {
 export function useEventLink(uuid: string) {
   return useQuery({
     queryKey: [KEY, uuid, "link"],
-    queryFn: () => apiFetch<EventLink>(`/events/${uuid}/link/`),
+    queryFn: ({ signal }) => apiFetch<EventLink>(`/events/${uuid}/link/`, { signal }),
     enabled: !!uuid,
   });
 }
@@ -93,7 +93,7 @@ export function useRegenerateLink(uuid: string) {
 export function useRsvpSummary(uuid: string) {
   return useQuery({
     queryKey: [KEY, uuid, "summary"],
-    queryFn: () => apiFetch<RsvpSummary>(`/events/${uuid}/rsvps/summary/`),
+    queryFn: ({ signal }) => apiFetch<RsvpSummary>(`/events/${uuid}/rsvps/summary/`, { signal }),
     enabled: !!uuid,
   });
 }
@@ -101,7 +101,7 @@ export function useRsvpSummary(uuid: string) {
 export function useEventRsvps(uuid: string) {
   return useQuery({
     queryKey: [KEY, uuid, "rsvps"],
-    queryFn: () => apiFetch<RsvpList>(`/events/${uuid}/rsvps/`),
+    queryFn: ({ signal }) => apiFetch<RsvpList>(`/events/${uuid}/rsvps/`, { signal }),
     enabled: !!uuid,
   });
 }

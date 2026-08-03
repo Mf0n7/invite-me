@@ -19,6 +19,10 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.
 
 FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")
 
+# Quantos proxies reversos confiáveis existem à frente da aplicação.
+# No Coolify/Hostinger é 1 (Traefik). Se puser um CDN/WAF na frente, vire 2.
+TRUSTED_PROXY_COUNT = env.int("TRUSTED_PROXY_COUNT", default=1)
+
 # ---------------------------------------------------------------- Apps
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -59,6 +63,10 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # ---------------------------------------------------------------- Middleware
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    # Logo após o CORS: descarta flood antes de qualquer trabalho da aplicação,
+    # mas ainda dentro do CorsMiddleware para que o 429 leve os headers de CORS
+    # (senão o browser mostra "erro de CORS" em vez do 429 real).
+    "apps.common.middleware.IpRateLimitMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -147,6 +155,37 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 25,
+    # Resolve o IP real a partir do X-Forwarded-For contando da direita
+    # (mesma lógica de apps.common.ratelimit.client_ip).
+    "NUM_PROXIES": TRUSTED_PROXY_COUNT,
+    "DEFAULT_THROTTLE_CLASSES": (
+        "apps.common.throttling.BurstAnonThrottle",
+        "apps.common.throttling.SustainedAnonThrottle",
+        "apps.common.throttling.BurstUserThrottle",
+        "apps.common.throttling.SustainedUserThrottle",
+    ),
+    "DEFAULT_THROTTLE_RATES": {
+        # Padrões (valem para toda view que não declare escopo próprio)
+        "anon_burst": env("THROTTLE_ANON_BURST", default="90/min"),
+        "anon_sustained": env("THROTTLE_ANON_SUSTAINED", default="1200/hour"),
+        "user_burst": env("THROTTLE_USER_BURST", default="180/min"),
+        "user_sustained": env("THROTTLE_USER_SUSTAINED", default="4000/hour"),
+        # Autenticação
+        "login_ip": env("THROTTLE_LOGIN_IP", default="30/min"),
+        "register": "5/min",
+        "register_sustained": "20/hour",
+        "password_reset": "5/min",
+        "password_reset_sustained": "15/hour",
+        "token_refresh": "60/min",
+        # Rotas públicas (convite / RSVP / presentes)
+        "public_read": env("THROTTLE_PUBLIC_READ", default="120/min"),
+        "public_read_sustained": env("THROTTLE_PUBLIC_READ_HOUR", default="1200/hour"),
+        "public_write": env("THROTTLE_PUBLIC_WRITE", default="12/min"),
+        "public_write_sustained": env("THROTTLE_PUBLIC_WRITE_HOUR", default="60/hour"),
+        # Ações caras do usuário autenticado
+        "checkout": "20/min",
+        "upload": "40/hour",
+    },
 }
 
 SIMPLE_JWT = {
@@ -172,6 +211,9 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "0.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
+    # Em prod a doc fica restrita a staff (prod.py sobrescreve). Deixar o schema
+    # aberto entrega o mapa completo da API para quem quiser automatizar ataque.
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
     # Ordem e descrição dos grupos exibidos na doc (Swagger/Redoc).
     "TAGS": [
         {"name": "Conta & Autenticação", "description": "Cadastro, login (e-mail e Google) e tokens."},
@@ -192,9 +234,90 @@ SPECTACULAR_SETTINGS = {
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=["http://localhost:3000"])
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["http://localhost:3000"])
 
+# ---------------------------------------------------------------- Cache
+# Em dev, cache local em memória (não exige Redis rodando).
+# Em prod, prod.py troca por Redis — obrigatório para o rate limit valer
+# entre os workers do gunicorn (senão cada worker conta sozinho).
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "convida-local",
+    }
+}
+
+# ---------------------------------------------------------------- Rate limit / anti-DDoS
+# Tetos por IP aplicados no middleware, antes de qualquer view.
+RATE_LIMIT = {
+    "ENABLED": env.bool("RATE_LIMIT_ENABLED", default=True),
+    # Pico curto — navegação rápida entre páginas dispara várias chamadas.
+    "BURST": env.int("RATE_LIMIT_BURST", default=60),
+    "BURST_WINDOW": env.int("RATE_LIMIT_BURST_WINDOW", default=10),
+    # Volume sustentado.
+    "PER_MINUTE": env.int("RATE_LIMIT_PER_MINUTE", default=300),
+    "PER_HOUR": env.int("RATE_LIMIT_PER_HOUR", default=4000),
+    # Rotas sensíveis (autenticação e admin) — teto próprio, somado ao global.
+    "SENSITIVE_PER_MINUTE": env.int("RATE_LIMIT_AUTH_PER_MINUTE", default=30),
+    "SENSITIVE_PER_HOUR": env.int("RATE_LIMIT_AUTH_PER_HOUR", default=200),
+    # Requisições simultâneas do mesmo IP.
+    "MAX_CONCURRENT": env.int("RATE_LIMIT_MAX_CONCURRENT", default=15),
+    "CONCURRENCY_TTL": 60,
+    "EXEMPT_PREFIXES": [
+        "/healthz/",
+        "/api/v1/billing/webhook/",  # autenticado por assinatura HMAC do Stripe
+    ],
+    # Só os endpoints que manipulam credenciais. `/api/v1/auth/user/` e
+    # `/logout/` ficam de fora de propósito: são chamados no fluxo normal e um
+    # escritório inteiro atrás de um NAT compartilha o mesmo IP.
+    "SENSITIVE_PREFIXES": [
+        "/api/v1/auth/login",
+        "/api/v1/auth/token",
+        "/api/v1/auth/registration",
+        "/api/v1/auth/password",
+        "/api/v1/auth/google",
+        "/admin/login/",
+        "/accounts/",  # callbacks OAuth do allauth
+    ],
+}
+
+# ---------------------------------------------------------------- Limites de upload
+# Teto do corpo da requisição — corta POST gigante antes de chegar na view.
+DATA_UPLOAD_MAX_MEMORY_SIZE = env.int("DATA_UPLOAD_MAX_MEMORY_SIZE", default=6 * 1024 * 1024)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024  # acima disso vai para arquivo temporário
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 200
+DATA_UPLOAD_MAX_NUMBER_FILES = 5
+FILE_UPLOAD_PERMISSIONS = 0o644
+
+# ---------------------------------------------------------------- Cabeçalhos de segurança
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
+X_FRAME_OPTIONS = "DENY"
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
+
+# ---------------------------------------------------------------- Logs
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {"format": "[{levelname}] {asctime} {name}: {message}", "style": "{"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "simple"},
+    },
+    "root": {"handlers": ["console"], "level": "INFO"},
+    "loggers": {
+        # Bloqueios de rate limit e tentativas de força bruta caem aqui.
+        "convida.security": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "django.security": {"handlers": ["console"], "level": "INFO", "propagate": False},
+    },
+}
+
 # ---------------------------------------------------------------- Celery
-CELERY_BROKER_URL = env("REDIS_URL", default="redis://localhost:6379/0")
-CELERY_RESULT_BACKEND = env("REDIS_URL", default="redis://localhost:6379/0")
+REDIS_URL = env("REDIS_URL", default="redis://localhost:6379/0")
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"

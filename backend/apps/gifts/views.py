@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.billing.entitlements import can_use_gift_list
+from apps.common.throttling import ScopedSustainedThrottle, ScopedThrottle
 from apps.events.models import Event, EventLink
 from apps.invitations.models import Invitation
 
@@ -78,6 +79,9 @@ class PublicGiftListView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
     serializer_class = PublicGiftSerializer
+    throttle_classes = [ScopedThrottle, ScopedSustainedThrottle]
+    throttle_scope = "public_read"
+    throttle_scope_sustained = "public_read_sustained"
 
     def get(self, request, token):
         event = resolve_event_by_token(token)
@@ -93,6 +97,11 @@ class GiftClaimView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
     serializer_class = GiftClaimSerializer
+    # Reserva é uma ação destrutiva feita por anônimo (o presente some da lista
+    # dos demais): mesmo teto de escrita pública, 12/min e 60/h por IP.
+    throttle_classes = [ScopedThrottle, ScopedSustainedThrottle]
+    throttle_scope = "public_write"
+    throttle_scope_sustained = "public_write_sustained"
 
     def post(self, request, token, pk):
         event = resolve_event_by_token(token)
