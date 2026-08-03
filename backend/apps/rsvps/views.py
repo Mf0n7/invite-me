@@ -1,5 +1,6 @@
 from django.db.models import Count, Sum
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -22,6 +23,7 @@ def _summary(event: Event) -> dict:
     return {"confirmations": confirmations, "total_guests": confirmations + companions}
 
 
+@extend_schema(tags=["Confirmações (RSVP)"])
 class RsvpSummaryView(APIView):
     """Resumo de confirmados para o dono — contagem sempre liberada, sem teto."""
 
@@ -33,6 +35,7 @@ class RsvpSummaryView(APIView):
         return Response(RsvpSummarySerializer(_summary(event)).data)
 
 
+@extend_schema(tags=["Confirmações (RSVP)"])
 class RsvpListView(APIView):
     """Lista de confirmados para o dono, com gating de nomes por faixa.
 
@@ -80,6 +83,7 @@ class RsvpListView(APIView):
         )
 
 
+@extend_schema(tags=["Confirmações (RSVP)"])
 class PublicEventView(APIView):
     """Página pública do convite — resolve o evento pelo token do link ativo."""
 
@@ -92,6 +96,7 @@ class PublicEventView(APIView):
         return Response(PublicEventSerializer(link.event, context={"request": request}).data)
 
 
+@extend_schema(tags=["Confirmações (RSVP)"])
 class ConfirmView(APIView):
     """Confirmação de presença via link público (sem autenticação)."""
 

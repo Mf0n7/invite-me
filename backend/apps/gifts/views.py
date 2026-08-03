@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -26,6 +27,7 @@ def resolve_event_by_token(token) -> Event:
 # --------------------------------------------------------------------- Dono
 
 
+@extend_schema(tags=["Lista de presentes"])
 class GiftListView(APIView):
     """Lista/cria presentes do evento (criar exige o addon de lista de presentes)."""
 
@@ -53,6 +55,7 @@ class GiftListView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@extend_schema(tags=["Lista de presentes"])
 class GiftDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Editar/excluir um presente (dono)."""
 
@@ -68,6 +71,7 @@ class GiftDetailView(generics.RetrieveUpdateDestroyAPIView):
 # ------------------------------------------------------------------ Público
 
 
+@extend_schema(tags=["Lista de presentes"])
 class PublicGiftListView(APIView):
     """Lista de presentes vista pelo convidado (via token de convite)."""
 
@@ -82,6 +86,7 @@ class PublicGiftListView(APIView):
         return Response(PublicGiftSerializer(event.gifts.all(), many=True).data)
 
 
+@extend_schema(tags=["Lista de presentes"])
 class GiftClaimView(APIView):
     """Convidado reserva um presente — fica indisponível para os demais."""
 

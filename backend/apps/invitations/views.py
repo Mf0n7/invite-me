@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, parsers, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -16,6 +17,7 @@ from .serializers import (
 )
 
 
+@extend_schema(tags=["Convites nominais"])
 class EventInvitationListCreateView(generics.ListCreateAPIView):
     """Lista e cria convites nominais de um evento (apenas o dono)."""
 
@@ -34,6 +36,7 @@ class EventInvitationListCreateView(generics.ListCreateAPIView):
         serializer.save(event=self._event())
 
 
+@extend_schema(tags=["Convites nominais"])
 class InvitationDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Editar (nome) ou excluir um convite nominal."""
 
@@ -46,6 +49,7 @@ class InvitationDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Invitation.objects.filter(event__owner=self.request.user)
 
 
+@extend_schema(tags=["Convites nominais"])
 class InvitationImportView(APIView):
     """Importa nomes de uma planilha (.csv/.xlsx) e gera os convites."""
 
@@ -70,6 +74,7 @@ class InvitationImportView(APIView):
         return Response({"created": len(invitations), "names": names}, status=201)
 
 
+@extend_schema(tags=["Convites nominais"])
 class PublicNominalView(APIView):
     """Página pública do convite nominal."""
 
@@ -84,6 +89,7 @@ class PublicNominalView(APIView):
         )
 
 
+@extend_schema(tags=["Convites nominais"])
 class NominalConfirmView(APIView):
     """Confirmação nominal de uso único."""
 
