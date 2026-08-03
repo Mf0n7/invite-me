@@ -5,6 +5,7 @@ import { CalendarDays, MapPin, Plus } from "lucide-react";
 
 import { DashboardShell } from "@/components/dashboard/shell";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEvents } from "@/hooks/use-events";
@@ -38,11 +39,18 @@ export default function DashboardPage() {
         <EmptyState />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {events.map((ev) => (
+          {events.map((ev) => {
+            const eventHasPassed = new Date(ev.starts_at) < new Date();
+            return (
             <Link key={ev.uuid} href={`/dashboard/events/${ev.uuid}/edit`}>
               <Card className="card-hover group h-full">
                 <CardHeader>
-                  <CardTitle className="text-xl">{ev.title}</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                    {ev.title}
+                    {eventHasPassed && (
+                      <Badge variant="destructive">Encerrado</Badge>
+                    )}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-muted-foreground">
                   <p className="flex items-center gap-2">
@@ -56,7 +64,8 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             </Link>
-          ))}
+            );
+          })}
         </div>
       )}
     </DashboardShell>
