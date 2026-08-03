@@ -10,8 +10,10 @@ import { useFieldArray, useForm } from "react-hook-form";
 
 import { GiftSection } from "@/components/invite/gift-section";
 import { InvitePageSkeleton } from "@/features/invitations/components/invite-page-skeleton";
+import { Badge } from "@/components/ui/badge";
 import { Centered } from "@/components/shared/centered";
 import { FieldError } from "@/components/shared/field-error";
+import { PoweredBy } from "@/components/shared/powered-by";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -82,9 +84,13 @@ export default function InvitePage() {
     );
   }
 
+  const eventHasPassed = new Date(event.starts_at) < new Date();
+
   return (
     <main className="container flex min-h-screen flex-col items-center justify-center py-12">
-      <Card className="w-full max-w-lg overflow-hidden">
+      <Card
+        className={`w-full max-w-lg overflow-hidden ${eventHasPassed ? "opacity-70" : ""}`}
+      >
         {event.photo && (
           <div className="relative h-48 w-full">
             <Image
@@ -111,6 +117,11 @@ export default function InvitePage() {
             <p className="flex items-center gap-2">
               <CalendarDays className="size-4 text-primary" />
               {formatDateTime(event.starts_at)}
+              {eventHasPassed && (
+                <Badge variant="destructive" className="ml-1">
+                  Evento encerrado
+                </Badge>
+              )}
             </p>
             <p className="flex items-center gap-2">
               <MapPin className="size-4 text-primary" />
@@ -144,6 +155,10 @@ export default function InvitePage() {
                 Até lá, {confirmedName}. 🎉
               </p>
             </div>
+          ) : eventHasPassed ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              Este evento já aconteceu e não aceita mais confirmações.
+            </p>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-1.5">
@@ -204,9 +219,7 @@ export default function InvitePage() {
           <GiftSection token={token} />
         </CardContent>
       </Card>
-      <p className="mt-6 text-xs text-muted-foreground/70">
-        Powered by <span className="font-semibold text-primary">Convida</span>
-      </p>
+      <PoweredBy />
     </main>
   );
 }

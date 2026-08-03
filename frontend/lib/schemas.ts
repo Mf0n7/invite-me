@@ -39,10 +39,16 @@ export const eventSchema = z
   });
 export type EventFormValues = z.infer<typeof eventSchema>;
 
+const nameRegex = /^[\p{L}\s'-]+$/u;
+const nameField = z
+  .string()
+  .trim()
+  .min(5, "O nome deve ter ao menos 5 caracteres")
+  .max(120)
+  .regex(nameRegex, "O nome não pode conter caracteres especiais ou números");
+
 export const confirmSchema = z.object({
-  name: z.string().trim().min(2, "Informe seu nome").max(120),
-  companions: z
-    .array(z.object({ name: z.string().trim().min(1, "Informe o nome do acompanhante").max(120) }))
-    .default([]),
+  name: nameField,
+  companions: z.array(z.object({ name: nameField })).default([]),
 });
 export type ConfirmValues = z.infer<typeof confirmSchema>;
