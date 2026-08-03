@@ -1,8 +1,11 @@
 import uuid
 
 from django.conf import settings
+from django.core.files.uploadedfile import UploadedFile
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from .images import compress_event_photo
 
 
 def event_photo_path(instance, filename):
@@ -47,6 +50,12 @@ class Event(models.Model):
         # Coerência: sem acompanhantes => limite zero.
         if not self.allow_companions:
             self.max_companions = 0
+        # Comprime só quando há upload novo (arquivo em memória/temp).
+        if self.photo and isinstance(getattr(self.photo, "file", None), UploadedFile):
+            compressed = compress_event_photo(self.photo)
+            if compressed:
+                name, content = compressed
+                self.photo.save(name, content, save=False)
         super().save(*args, **kwargs)
 
     # ---- Link público de convite ----
