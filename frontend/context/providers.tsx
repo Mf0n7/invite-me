@@ -25,6 +25,8 @@ function ThemedToaster() {
     <Toaster
       theme={(resolvedTheme as "light" | "dark") ?? "system"}
       position="top-center"
+      toastOptions={{ duration: 3000 }}
+      closeButton
       richColors
     />
   );
